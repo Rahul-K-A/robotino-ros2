@@ -17,7 +17,7 @@ AnalogInputArrayROS::~AnalogInputArrayROS()
 	analog_pub_.shutdown();
 }
 
-void AnalogInputArrayROS::setTimeStamp(ros::Time stamp)
+void AnalogInputArrayROS::setTimeStamp(rclcpp::Time stamp)
 {
 	stamp_ = stamp;
 }

@@ -19,7 +19,7 @@ public:
 	PowerManagementROS();
 	~PowerManagementROS();
 
-	void setTimeStamp(ros::Time stamp);
+	void setTimeStamp(rclcpp::Time stamp);
 
 private:
 	ros::NodeHandle nh_;

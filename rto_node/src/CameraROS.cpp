@@ -38,7 +38,7 @@ void CameraROS::setNumber( int number )
 	setCameraNumber( number );
 }
 
-void CameraROS::setTimeStamp(ros::Time stamp)
+void CameraROS::setTimeStamp(rclcpp::Time stamp)
 {
 	stamp_ = stamp;
 }

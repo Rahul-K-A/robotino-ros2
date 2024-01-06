@@ -19,7 +19,7 @@ CompactBHAROS::~CompactBHAROS()
 	bha_sub_.shutdown();
 }
 
-void CompactBHAROS::setTimeStamp(ros::Time stamp)
+void CompactBHAROS::setTimeStamp(rclcpp::Time stamp)
 {
 	stamp_ = stamp;
 }

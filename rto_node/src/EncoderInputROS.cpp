@@ -20,7 +20,7 @@ EncoderInputROS::~EncoderInputROS()
 	encoder_position_server_.shutdown();
 }
 
-void EncoderInputROS::setTimeStamp(ros::Time stamp)
+void EncoderInputROS::setTimeStamp(rclcpp::Time stamp)
 {
 	stamp_ = stamp;
 }

@@ -17,7 +17,7 @@ DigitalInputArrayROS::~DigitalInputArrayROS()
 	digital_pub_.shutdown();
 }
 
-void DigitalInputArrayROS::setTimeStamp(ros::Time stamp)
+void DigitalInputArrayROS::setTimeStamp(rclcpp::Time stamp)
 {
 	stamp_ = stamp;
 }

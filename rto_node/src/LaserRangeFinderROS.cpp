@@ -30,7 +30,7 @@ void LaserRangeFinderROS::setNumber( int number )
 	setLaserRangeFinderNumber( number );
 }
 
-void LaserRangeFinderROS::setTimeStamp(ros::Time stamp)
+void LaserRangeFinderROS::setTimeStamp(rclcpp::Time stamp)
 {
 	stamp_ = stamp;
 }

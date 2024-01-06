@@ -20,7 +20,7 @@ NorthStarROS::~NorthStarROS()
 	north_star_pub_.shutdown();
 }
 
-void NorthStarROS::setTimeStamp(ros::Time stamp)
+void NorthStarROS::setTimeStamp(rclcpp::Time stamp)
 {
 	stamp_ = stamp;
 }

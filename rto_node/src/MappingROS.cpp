@@ -48,7 +48,7 @@ void  MappingROS::odomCallback(const nav_msgs::Odometry& odom)
 	}
 }
 
-void MappingROS::setTimeStamp(ros::Time stamp)
+void MappingROS::setTimeStamp(rclcpp::Time stamp)
 {
 	stamp_ = stamp;
 }

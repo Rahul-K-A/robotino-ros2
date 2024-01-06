@@ -18,7 +18,7 @@ DistanceSensorArrayROS::~DistanceSensorArrayROS()
 	distances_pub_.shutdown();
 }
 
-void DistanceSensorArrayROS::setTimeStamp(ros::Time stamp)
+void DistanceSensorArrayROS::setTimeStamp(rclcpp::Time stamp)
 {
 	stamp_ = stamp;
 }

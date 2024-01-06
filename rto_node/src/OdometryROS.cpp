@@ -23,7 +23,7 @@ OdometryROS::~OdometryROS()
 	reset_odometry_server_.shutdown();
 }
 
-void OdometryROS::setTimeStamp(ros::Time stamp)
+void OdometryROS::setTimeStamp(rclcpp::Time stamp)
 {
 	stamp_ = stamp;
 }

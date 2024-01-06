@@ -17,7 +17,7 @@ MotorArrayROS::~MotorArrayROS()
 	motor_pub_.shutdown();
 }
 
-void MotorArrayROS::setTimeStamp(ros::Time stamp)
+void MotorArrayROS::setTimeStamp(rclcpp::Time stamp)
 {
 	stamp_ = stamp;
 }

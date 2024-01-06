@@ -23,7 +23,7 @@ GrapplerROS::~GrapplerROS()
 	grappler_axis_sub_.shutdown();
 }
 
-void GrapplerROS::setTimeStamp(ros::Time stamp)
+void GrapplerROS::setTimeStamp(rclcpp::Time stamp)
 {
 	stamp_ = stamp;
 }

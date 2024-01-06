@@ -17,7 +17,7 @@ PowerManagementROS::~PowerManagementROS()
 	power_pub_.shutdown();
 }
 
-void PowerManagementROS::setTimeStamp(ros::Time stamp)
+void PowerManagementROS::setTimeStamp(rclcpp::Time stamp)
 {
 	stamp_ = stamp;
 }

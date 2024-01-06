@@ -19,7 +19,7 @@ public:
 	MotorArrayROS();
 	~MotorArrayROS();
 
-	void setTimeStamp(ros::Time stamp);
+	void setTimeStamp(rclcpp::Time stamp);
 	void getMotorReadings(std::vector<float> &velocities, std::vector<int> &positions );
 
 private:

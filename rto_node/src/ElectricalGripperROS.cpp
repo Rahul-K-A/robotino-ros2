@@ -20,7 +20,7 @@ ElectricalGripperROS::~ElectricalGripperROS()
 	set_gripper_server_.shutdown();
 }
 
-void ElectricalGripperROS::setTimeStamp(ros::Time stamp)
+void ElectricalGripperROS::setTimeStamp(rclcpp::Time stamp)
 {
 	stamp_ = stamp;
 }
