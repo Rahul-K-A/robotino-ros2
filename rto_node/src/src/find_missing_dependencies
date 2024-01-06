@@ -1,0 +1,61 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+    echo "Error! Expected package name as first argument."
+    exit
+fi
+
+PKG_NAME=${1}
+PKG_PATH=$(rospack find ${PKG_NAME})
+
+USED_PKGS=$(grep -rIoh "#include <\([a-zA-Z0-9_-]\+\)" ${PKG_PATH} | cut -d'<' -f 2 | sort -u)
+LISTED_PKGS=$(grep -oh "<build_depend>[a-zA-Z0-9_-]*" ${PKG_PATH}/package.xml | cut -d'>' -f 2)
+
+declare -a missing_pkgs=()
+declare -a missing_pkgs_options=()
+
+# Find missing packages by comparing the two lists
+for used_pkg in ${USED_PKGS}; do
+    pkg_declared=false
+    for listed_pkg in ${LISTED_PKGS}; do
+        if [ "$used_pkg" = "$listed_pkg" ]; then
+            pkg_declared=true
+            break
+        fi
+    done
+    if [ "$pkg_declared" = false ]; then
+        missing_pkgs+=($used_pkg)
+        missing_pkgs_options+=($used_pkg)
+        missing_pkgs_options+=("")
+        missing_pkgs_options+=(off)
+    fi
+done
+
+
+if (( ${#missing_pkgs[@]} <= 0 )); then
+    echo "No missing packages found. Shutting down now."
+    exit
+fi
+
+# Display menu for choosing which packages to display
+cmd=(whiptail --separate-output --checklist "Select options:" 22 50 16)
+choices=$("${cmd[@]}" "${missing_pkgs_options[@]}" 2>&1 >/dev/tty)
+clear
+
+echo "You chose the following missing package dependencies for package '${PKG_NAME}':"
+echo "${choices[@]}"
+echo ""
+echo "You can add them by copying the following lines to the 'package.xml'of '${PKG_NAME}':"
+echo ""
+
+for missing_pkg in $choices; do
+    echo "<build_depend>${missing_pkg}</build_depend>"
+done
+
+echo ""
+
+for missing_pkg in $choices; do
+    echo "<exec_depend>${missing_pkg}</exec_depend>"
+done
+
+echo ""
