@@ -8,23 +8,24 @@
 #ifndef BUMPERROS_H_
 #define BUMPERROS_H_
 
+#include "rclcpp/rclcpp.hpp"
+#include "std_msgs/msg/bool.hpp"
+
 #include "rec/robotino/api2/Bumper.h"
 
-#include <ros/ros.h>
-#include <std_msgs/Bool.h>
 
-class BumperROS: public rec::robotino::api2::Bumper
+class BumperROS: public rec::robotino::api2::Bumper, rclcpp::Node
 {
 public:
 	BumperROS();
 	~BumperROS();
 
 private:
-	ros::NodeHandle nh_;
+	std_msgs::msg::Bool bumper_msg_;
+	rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr bumper_pub_;
 
-	ros::Publisher bumper_pub_;
 
-	std_msgs::Bool bumper_msg_;
+
 
 	void bumperEvent(bool hasContact);
 };
