@@ -9,9 +9,8 @@
 #define ANALOGINPUTARRAYROS_H_
 
 #include "rec/robotino/api2/AnalogInputArray.h"
-
-#include <ros/ros.h>
-#include "rto_msgs/AnalogReadings.h"
+#include "rclcpp/rclcpp.hpp"
+#include "rto_msgs/msg/analog_readings.hpp"
 
 class AnalogInputArrayROS: public rec::robotino::api2::AnalogInputArray
 {
