@@ -1,4 +1,4 @@
-time stamp
+builtin_interfaces/Time stamp
 uint32 seq
 uint32 numServos
 bool torqueEnabled
