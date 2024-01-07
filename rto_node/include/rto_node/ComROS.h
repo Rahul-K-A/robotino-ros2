@@ -17,6 +17,7 @@ class ComROS: public rec::robotino::api2::Com
 {
 public:
 	ComROS();
+	ComROS(rclcpp::Node::SharedPtr parent_node_ptr);
 	~ComROS();
 
 	void setName( const std::string& name );

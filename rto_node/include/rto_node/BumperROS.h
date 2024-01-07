@@ -18,6 +18,7 @@ class BumperROS: public rec::robotino::api2::Bumper
 {
 public:
 	BumperROS();
+	BumperROS(rclcpp::Node::SharedPtr parent_node_ptr);
 	~BumperROS();
 	void setParentNode( rclcpp::Node::SharedPtr parent_node_ptr);
 
