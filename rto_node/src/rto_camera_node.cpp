@@ -8,12 +8,11 @@
 
 #include "RTOCameraNode.h"
 
-#include <ros/ros.h>
-
 int main(int argc, char** argv)
 {
-	ros::init(argc, argv, "rto_camera_node");
+	rclcpp::init(argc, argv);
 	RTOCameraNode rn;
 	rn.spin();
+	rclcpp::shutdown();
 	return 0;
 }
