@@ -15,11 +15,87 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+list(APPEND CMAKE_MODULE_PATH "/usr/local/robotino/api2/cmake" "/opt/robotino/cmake")
+
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(RobotinoAPI2 REQUIRED)
+find_package(rto_msgs REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
+
+
+include_directories(
+  /usr/local/robotino/api2
+)
+
+add_executable(
+  rto_node
+  src/rto_node.cpp
+  src/AnalogInputArrayROS.cpp
+  src/BumperROS.cpp
+  src/CameraROS.cpp
+  src/CompactBHAROS.cpp
+  src/ComROS.cpp
+  src/DigitalInputArrayROS.cpp
+  src/DigitalOutputArrayROS.cpp
+  src/DistanceSensorArrayROS.cpp
+  src/ElectricalGripperROS.cpp
+  src/EncoderInputROS.cpp
+  src/GrapplerROS.cpp
+  src/LaserRangeFinderROS.cpp
+  src/MotorArrayROS.cpp
+  src/NorthStarROS.cpp
+  src/OdometryROS.cpp
+  src/OmniDriveROS.cpp
+  src/PowerManagementROS.cpp
+  src/RTONode.cpp
+)
+
+target_link_libraries(
+  rto_node
+  ${REC_ROBOTINO_API2_LIBRARY}
+)
+
+
+ament_target_dependencies(rto_node rclcpp rto_msgs) 
+
+add_executable(
+  rto_laserrangefinder_node
+  src/rto_laserrangefinder_node.cpp
+  src/ComROS.cpp
+  src/LaserRangeFinderROS.cpp
+  src/RTOLaserRangeFinderNode.cpp
+)
+
+ament_target_dependencies(rto_laserrangefinder_node rclcpp rto_msgs) 
+
+
+target_link_libraries(
+  rto_laserrangefinder_node
+  ${REC_ROBOTINO_API2_LIBRARY}
+)
+
+add_executable(
+  rto_camera_node
+  src/rto_camera_node.cpp
+  src/ComROS.cpp
+  src/CameraROS.cpp
+  src/RTOCameraNode.cpp
+)
+
+ament_target_dependencies(rto_camera_node rclcpp rto_msgs) 
+
+target_link_libraries(
+  rto_camera_node
+  ${REC_ROBOTINO_API2_LIBRARY}
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -31,5 +107,11 @@ if(BUILD_TESTING)
   #set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+install(TARGETS
+  rto_node
+  rto_camera_node
+  rto_laserrangefinder_node
+  DESTINATION lib/${PROJECT_NAME})
 
 ament_package()
