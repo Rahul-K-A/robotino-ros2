@@ -7,13 +7,20 @@
 
 #include "LaserRangeFinderROS.h"
 
-LaserRangeFinderROS::LaserRangeFinderROS()
+LaserRangeFinderROS::LaserRangeFinderROS():
+parent_node(nullptr)
 {
+	laser_scan_msg_ = sensor_msgs::msg::LaserScan();
 }
 
 LaserRangeFinderROS::~LaserRangeFinderROS()
 {
-	laser_scan_pub_.shutdown();
+}
+
+void LaserRangeFinderROS::setParentNode(const rclcpp::Node::SharedPtr parent_node_ptr)
+{
+	assert(parent_node == nullptr);
+	parent_node = parent_node_ptr;
 }
 
 void LaserRangeFinderROS::setNumber( int number )
@@ -25,7 +32,7 @@ void LaserRangeFinderROS::setNumber( int number )
 	else
 		topic << "scan" << number;
 
-	laser_scan_pub_ = nh_.advertise<sensor_msgs::LaserScan>(topic.str(), 1, false);
+	laser_scan_pub_ =  parent_node->create_publisher<sensor_msgs::msg::LaserScan>(topic.str(), 10);
 
 	setLaserRangeFinderNumber( number );
 }
@@ -38,7 +45,6 @@ void LaserRangeFinderROS::setTimeStamp(rclcpp::Time stamp)
 void LaserRangeFinderROS::scanEvent(const rec::robotino::api2::LaserRangeFinderReadings &scan)
 {
 	// Build the LaserScan message
-	laser_scan_msg_.header.seq = scan.seq;
 	laser_scan_msg_.header.stamp = stamp_;
 	laser_scan_msg_.header.frame_id = "laser_link";
 
@@ -72,5 +78,5 @@ void LaserRangeFinderROS::scanEvent(const rec::robotino::api2::LaserRangeFinderR
 
 	// Publish the message
 	if( numRanges > 0 || numIntensities > 0)
-		laser_scan_pub_.publish(laser_scan_msg_);
+		laser_scan_pub_->publish(laser_scan_msg_);
 }
