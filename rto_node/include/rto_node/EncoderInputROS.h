@@ -34,9 +34,9 @@ private:
 
 	void readingsChangedEvent( int velocity, int position, float current );
 
-	bool setEncoderPositionCallback(
-			const std::shared_ptr<rto_msgs::srv::SetEncoderPosition::Request> req,
-			const std::shared_ptr<rto_msgs::srv::SetEncoderPosition::Response> res);
+	void setEncoderPositionCallback(
+			const rto_msgs::srv::SetEncoderPosition::Request::SharedPtr req,
+			const rto_msgs::srv::SetEncoderPosition::Response::SharedPtr res);
 };
 
 #endif /* ENCODERINPUTROS_H_ */

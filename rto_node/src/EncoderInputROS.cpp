@@ -36,11 +36,10 @@ void EncoderInputROS::readingsChangedEvent( int velocity, int position, float cu
 	encoder_pub_->publish( encoder_msg_ );
 }
 
-bool EncoderInputROS::setEncoderPositionCallback(
-		const std::shared_ptr<rto_msgs::srv::SetEncoderPosition::Request> req,
-		const std::shared_ptr<rto_msgs::srv::SetEncoderPosition::Response> res)
+void EncoderInputROS::setEncoderPositionCallback(
+		const rto_msgs::srv::SetEncoderPosition::Request::SharedPtr req,
+		const rto_msgs::srv::SetEncoderPosition::Response::SharedPtr res)
 {
 	setPosition( req->position, req->velocity );
 
-	return true;
 }
