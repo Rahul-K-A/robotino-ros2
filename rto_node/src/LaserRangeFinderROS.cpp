@@ -8,7 +8,6 @@
 #include "LaserRangeFinderROS.h"
 
 LaserRangeFinderROS::LaserRangeFinderROS():
-parent_node(nullptr)
 {
 	laser_scan_msg_ = sensor_msgs::msg::LaserScan();
 }
@@ -17,13 +16,7 @@ LaserRangeFinderROS::~LaserRangeFinderROS()
 {
 }
 
-void LaserRangeFinderROS::setParentNode(const rclcpp::Node::SharedPtr parent_node_ptr)
-{
-	assert(parent_node == nullptr);
-	parent_node = parent_node_ptr;
-}
-
-void LaserRangeFinderROS::setNumber( int number )
+void LaserRangeFinderROS::setNumber( int number, rclcpp::Node* parent_node )
 {
 	std::stringstream topic;
 

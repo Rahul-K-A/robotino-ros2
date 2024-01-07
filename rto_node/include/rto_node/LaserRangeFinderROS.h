@@ -20,12 +20,10 @@ public:
 	LaserRangeFinderROS();
 	~LaserRangeFinderROS();
 
-	void setNumber( int number );
+	void setNumber( int number, rclcpp::Node* parent_node );
 	void setTimeStamp(rclcpp::Time stamp);
-	void setParentNode(const rclcpp::Node::SharedPtr parent_node_ptr);
 
 private:
-	rclcpp::Node::SharedPtr parent_node;
 	rclcpp::Publisher<sensor_msgs::msg::LaserScan>::SharedPtr laser_scan_pub_;
 
 	sensor_msgs::msg::LaserScan laser_scan_msg_;
