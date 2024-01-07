@@ -7,6 +7,8 @@
 
 #include "RTONode.h"
 
+using namespace std::chrono_literals;
+
 RTONode::RTONode():
 	Node("rto_node"),
 	analog_input_array_(this),
@@ -17,17 +19,28 @@ RTONode::RTONode():
 	encoder_input_(this),
 	motor_array_(this),
 	omni_drive_(this),
-	power_management_(this)
-	
+	power_management_(this),
+	distance_sensor_array_(this)
 {
-	nh_.param<std::string>("hostname", hostname_, "172.26.1.1" );
-	nh_.param<double>("max_linear_vel", max_linear_vel_, 0.2 );
-	nh_.param<double>("min_linear_vel", min_linear_vel_, 0.05 );
-	nh_.param<double>("max_angular_vel", max_angular_vel_, 1.0 );
-	nh_.param<double>("min_angular_vel", min_angular_vel_, 0.1 );
+	rclcpp::Parameter hostname_param_;
+	rclcpp::Parameter max_lin_vel_param_;
+	rclcpp::Parameter min_lin_vel_param_;
+	rclcpp::Parameter max_ang_vel_param_;
+	rclcpp::Parameter min_ang_vel_param_;
+	this->get_parameter_or("hostname", hostname_param_, rclcpp::Parameter("hostname", "172.26.1.1"));
+	this->get_parameter_or("max_linear_vel", hostname_param_, rclcpp::Parameter("max_linear_vel", 0.2));
+	this->get_parameter_or("min_linear_vel", hostname_param_, rclcpp::Parameter("min_linear_vel", 0.05));
+	this->get_parameter_or("max_angular_vel", hostname_param_, rclcpp::Parameter("max_angular_vel", 1.0));
+	this->get_parameter_or("min_angular_vel", hostname_param_, rclcpp::Parameter("min_angular_vel", 0.1));
 
-	distances_clearing_pub_ = nh_.advertise<sensor_msgs::PointCloud>("/distance_sensors_clearing", 1, true);
-	joint_states_pub_= nh_.advertise<sensor_msgs::JointState>("/rto_joint_states", 1, false);
+	hostname_ = hostname_param_.as_string();
+	max_linear_vel_ = max_lin_vel_param_.as_double();
+	min_linear_vel_ = min_lin_vel_param_.as_double();
+	max_angular_vel_ = max_ang_vel_param_.as_double();
+	min_angular_vel_ = min_ang_vel_param_.as_double();
+
+	distances_clearing_pub_ = this->create_publisher<sensor_msgs::msg::PointCloud>("/distance_sensors_clearing", 10);
+	joint_states_pub_= this->create_publisher<sensor_msgs::msg::JointState>("/rto_joint_states", 10);
 
 	com_.setName( "RTONode" );
 
@@ -37,8 +50,6 @@ RTONode::RTONode():
 
 RTONode::~RTONode()
 {
-	distances_clearing_pub_.shutdown();
-	joint_states_pub_.shutdown();
 }
 
 void RTONode::initModules()
@@ -48,13 +59,10 @@ void RTONode::initModules()
 	// Set the ComIds
 	analog_input_array_.setComId( com_.id() );
 	bumper_.setComId( com_.id() );
-	compact_bha_.setComId( com_.id() );
 	digital_input_array_.setComId( com_.id() );
 	digital_output_array_.setComId( com_.id() );
 	distance_sensor_array_.setComId( com_.id() );
-	electrical_gripper_.setComId( com_.id() );
 	encoder_input_.setComId( com_.id() );
-	grappler_.setComId( com_.id() );
 	motor_array_.setComId( com_.id() );
     //north_star_.setComId( com_.id() );
 	omni_drive_.setComId( com_.id() );
@@ -95,7 +103,7 @@ void RTONode::publishDistanceMsg()
 //		clearing_time_ = curr_time_;
 //		distances_clearing_pub_.publish( distances_clearing_msg_ );
 //	}
-	distances_clearing_pub_.publish( distances_clearing_msg_ );
+	distances_clearing_pub_->publish( distances_clearing_msg_ );
 }
 
 void RTONode::publishJointStateMsg()
@@ -111,24 +119,21 @@ void RTONode::publishJointStateMsg()
 	joint_state_msg_.position[2] = ( motor_positions_[1] / 16 ) * (2 * 3.142);
 
 	joint_state_msg_.header.stamp = curr_time_;
-	joint_states_pub_.publish( joint_state_msg_ );
+	joint_states_pub_->publish( joint_state_msg_ );
 }
 
 bool RTONode::spin()
 {
-	ros::Rate loop_rate( 30 );
+	rclcpp::WallRate loop_rate( 200ms );
 
-	while(nh_.ok())
+	while(rclcpp::ok())
 	{
-		curr_time_ = ros::Time::now();
+		curr_time_ = rclcpp::Clock().now();
 
 		analog_input_array_.setTimeStamp(curr_time_);
-		compact_bha_.setTimeStamp(curr_time_);
 		digital_input_array_.setTimeStamp(curr_time_);
 		distance_sensor_array_.setTimeStamp(curr_time_);
-		electrical_gripper_.setTimeStamp(curr_time_);
 		encoder_input_.setTimeStamp(curr_time_);
-		grappler_.setTimeStamp(curr_time_);
 		motor_array_.setTimeStamp(curr_time_);
         //north_star_.setTimeStamp(curr_time_);
 		power_management_.setTimeStamp(curr_time_);
@@ -136,7 +141,7 @@ bool RTONode::spin()
 		publishDistanceMsg();
 		publishJointStateMsg();
 		com_.processEvents();
-		ros::spinOnce();
+		rclcpp::spin_some(shared_from_this());
 		loop_rate.sleep();
 	}
 	return true;

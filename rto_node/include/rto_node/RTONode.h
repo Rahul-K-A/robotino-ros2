@@ -39,8 +39,8 @@ private:
 
 	rclcpp::Time curr_time_, clearing_time_;
 
-	rclcpp::Publisher<sensor_msgs::msg::PointCloud> distances_clearing_pub_;
-	rclcpp::Publisher<sensor_msgs::msg::JointState> joint_states_pub_;
+	rclcpp::Publisher<sensor_msgs::msg::PointCloud>::SharedPtr distances_clearing_pub_;
+	rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr joint_states_pub_;
 
 	sensor_msgs::msg::PointCloud distances_clearing_msg_;
 	sensor_msgs::msg::JointState joint_state_msg_;
