@@ -11,8 +11,6 @@
 int main(int argc, char** argv)
 {
 	rclcpp::init(argc, argv);
-	RTOCameraNode rn;
-	rn.spin();
-	rclcpp::shutdown();
+	rclcpp::spin(std::make_shared<RTOCameraNode>());
 	return 0;
 }

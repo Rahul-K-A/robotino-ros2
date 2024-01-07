@@ -22,6 +22,7 @@ public:
 	void spin();
 
 private:
+	rclcpp::TimerBase::SharedPtr timer_;
 	std::string hostname_;
 	int cameraNumber_;
 
