@@ -7,9 +7,9 @@
 
 #include "AnalogInputArrayROS.h"
 
-AnalogInputArrayROS::AnalogInputArrayROS()
+AnalogInputArrayROS::AnalogInputArrayROS(rclcpp::Node * parent_node)
 {
-	//analog_pub_ = this->create_publisher<rto_msgs::msg::AnalogReadings>("analog_readings", 10);
+	analog_pub_ = parent_node->create_publisher<rto_msgs::msg::AnalogReadings>("analog_readings", 10);
 	analog_msg_ = rto_msgs::msg::AnalogReadings();
 }
 
@@ -22,10 +22,6 @@ void AnalogInputArrayROS::setTimeStamp(rclcpp::Time stamp)
 	stamp_ = stamp;
 }
 
-void AnalogInputArrayROS::setParentNode(const rclcpp::Node::SharedPtr parent_node_ptr)
-{
-	parent_node = parent_node_ptr;
-}
 
 void AnalogInputArrayROS::valuesChangedEvent( const float* values, unsigned int size )
 {

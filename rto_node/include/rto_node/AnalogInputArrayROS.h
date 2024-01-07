@@ -15,16 +15,12 @@
 class AnalogInputArrayROS: public rec::robotino::api2::AnalogInputArray
 {
 public:
-	AnalogInputArrayROS();
+	AnalogInputArrayROS(rclcpp::Node * parent_node);
 	AnalogInputArrayROS(rclcpp::Node::SharedPtr parent_node_ptr);
 	~AnalogInputArrayROS();
 
 	void setTimeStamp(rclcpp::Time stamp);
-	void setParentNode( rclcpp::Node::SharedPtr parent_node_ptr);
-
-private:
-	rclcpp::Node::SharedPtr parent_node;
-	
+private:	
 	rclcpp::Publisher<rto_msgs::msg::AnalogReadings>::SharedPtr analog_pub_;
 
 	rto_msgs::msg::AnalogReadings analog_msg_;
