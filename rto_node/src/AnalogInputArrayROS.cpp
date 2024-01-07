@@ -9,12 +9,12 @@
 
 AnalogInputArrayROS::AnalogInputArrayROS()
 {
-	analog_pub_ = nh_.advertise<rto_msgs::AnalogReadings>("analog_readings", 1, true);
+	analog_pub_ = this->create_publisher<rto_msgs::msg::AnalogReadings>("analog_readings", 10);
+	analog_msg_ = rto_msgs::msg::AnalogReadings();
 }
 
 AnalogInputArrayROS::~AnalogInputArrayROS()
 {
-	analog_pub_.shutdown();
 }
 
 void AnalogInputArrayROS::setTimeStamp(rclcpp::Time stamp)
@@ -33,6 +33,6 @@ void AnalogInputArrayROS::valuesChangedEvent( const float* values, unsigned int 
 		memcpy( analog_msg_.values.data(), values, size * sizeof( float ) );
 
 		// Publish the msg
-		analog_pub_.publish(analog_msg_);
+		analog_pub_->publish(analog_msg_);
 	}
 }

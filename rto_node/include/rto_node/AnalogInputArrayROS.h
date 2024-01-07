@@ -12,7 +12,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "rto_msgs/msg/analog_readings.hpp"
 
-class AnalogInputArrayROS: public rec::robotino::api2::AnalogInputArray
+class AnalogInputArrayROS: public rec::robotino::api2::AnalogInputArray, public rclcpp::Node
 {
 public:
 	AnalogInputArrayROS();
@@ -21,13 +21,11 @@ public:
 	void setTimeStamp(rclcpp::Time stamp);
 
 private:
-	ros::NodeHandle nh_;
+	rclcpp::Publisher<rto_msgs::msg::AnalogReadings>::SharedPtr analog_pub_;
 
-	ros::Publisher analog_pub_;
+	rto_msgs::msg::AnalogReadings analog_msg_;
 
-	rto_msgs::AnalogReadings analog_msg_;
-
-	ros::Time stamp_;
+	rclcpp::Time stamp_;
 
 	void valuesChangedEvent( const float* values, unsigned int size );
 
