@@ -16,13 +16,11 @@
 class OmniDriveROS: public rec::robotino::api2::OmniDrive
 {
 public:
-	OmniDriveROS();
+	OmniDriveROS(rclcpp::Node* parent_node);
 	~OmniDriveROS();
 
-	void setParentNode(const rclcpp::Node::SharedPtr parent_node_ptr);
 
 private:
-	rclcpp::Node::SharedPtr parent_node;
 	rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_sub_;
 
 	double max_linear_vel_;

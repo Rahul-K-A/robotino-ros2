@@ -9,20 +9,13 @@
 
 using std::placeholders::_1;
 
-OmniDriveROS::OmniDriveROS():
-parent_node(nullptr)
+OmniDriveROS::OmniDriveROS(rclcpp::Node* parent_node)
 {
+	cmd_vel_sub_ = parent_node->create_subscription<geometry_msgs::msg::Twist>("cmd_vel",10,std::bind(&OmniDriveROS::cmdVelCallback, this, _1));
 }
 
 OmniDriveROS::~OmniDriveROS()
 {
-}
-
-void OmniDriveROS::setParentNode(const rclcpp::Node::SharedPtr parent_node_ptr)
-{
-	assert(parent_node == nullptr);
-	parent_node = parent_node_ptr;
-	cmd_vel_sub_ = parent_node->create_subscription<geometry_msgs::msg::Twist>("cmd_vel",10,std::bind(&OmniDriveROS::cmdVelCallback, this, _1));
 }
 
 void OmniDriveROS::cmdVelCallback(const geometry_msgs::msg::Twist::SharedPtr msg)
