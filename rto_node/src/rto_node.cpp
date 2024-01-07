@@ -12,7 +12,7 @@
 
 int main(int argc, char** argv)
 {
-	rclcpp::init(argc, argv, "rto_node");
+	rclcpp::init(argc, argv);
 	RTONode rn;
 	rn.spin();
 	return 0;
