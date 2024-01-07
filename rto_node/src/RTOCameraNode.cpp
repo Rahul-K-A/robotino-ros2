@@ -24,7 +24,6 @@ RTOCameraNode::RTOCameraNode()
 	com_.setName( os.str() );
 
 	initModules();
-	timer_ = this->create_wall_timer(250ms, std::bind(&RTOCameraNode::timer_callback, this));
 }
 
 RTOCameraNode::~RTOCameraNode()
@@ -38,7 +37,7 @@ void RTOCameraNode::initModules()
 	// Set the ComIds
 	camera_.setComId( com_.id() );
 
-	// Set the LaserRangeFinder numbers
+	// Set the camera numbers
 	camera_.setNumber( cameraNumber_ , this);
 
 	com_.connectToServer( false );
