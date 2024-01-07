@@ -18,6 +18,7 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
+find_package(builtin_interfaces REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -49,6 +50,10 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/ResetOdometry.srv"
   "srv/SetEncoderPosition.srv"
   "srv/SetGripperState.srv"
+
+  DEPENDENCIES builtin_interfaces
 )
+
+ament_export_dependencies(rosidl_default_runtime)
 
 ament_package()
