@@ -10,8 +10,8 @@
 
 #include "rec/robotino/api2/PowerManagement.h"
 
-#include <ros/ros.h>
-#include "rto_msgs/PowerReadings.h"
+#include "rclcpp/rclcpp.hpp"
+#include "rto_msgs/msg/power_readings.hpp"
 
 class PowerManagementROS: public rec::robotino::api2::PowerManagement
 {
@@ -20,14 +20,16 @@ public:
 	~PowerManagementROS();
 
 	void setTimeStamp(rclcpp::Time stamp);
+	void setParentNode(const rclcpp::Node::SharedPtr parent_node_ptr);
+
 
 private:
-	ros::NodeHandle nh_;
-	ros::Publisher power_pub_;
+	rclcpp::Node::SharedPtr parent_node;
+	rclcpp::Publisher<rto_msgs::msg::PowerReadings>::SharedPtr power_pub_;
 
-	rto_msgs::PowerReadings power_msg_;
+	rto_msgs::msg::PowerReadings power_msg_;
 
-	ros::Time stamp_;
+	rclcpp::Time stamp_;
 
 	void readingsEvent(float current, float voltage);
 };

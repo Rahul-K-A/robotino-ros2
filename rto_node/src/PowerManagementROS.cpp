@@ -7,14 +7,20 @@
 
 #include "PowerManagementROS.h"
 
-PowerManagementROS::PowerManagementROS()
+PowerManagementROS::PowerManagementROS():
+parent_node(nullptr)
 {
-	power_pub_ = nh_.advertise<rto_msgs::PowerReadings>("power_readings", 1, true);
 }
 
 PowerManagementROS::~PowerManagementROS()
 {
-	power_pub_.shutdown();
+}
+
+void PowerManagementROS::setParentNode(const rclcpp::Node::SharedPtr parent_node_ptr)
+{
+	assert(parent_node == nullptr);
+	parent_node = parent_node_ptr;
+	power_pub_ = parent_node->create_publisher<rto_msgs::msg::PowerReadings>("power_readings", 10);
 }
 
 void PowerManagementROS::setTimeStamp(rclcpp::Time stamp)
@@ -25,10 +31,10 @@ void PowerManagementROS::setTimeStamp(rclcpp::Time stamp)
 void PowerManagementROS::readingsEvent(float current, float voltage)
 {
 	// Build the PowerReadings msg
-	power_msg_.stamp = ros::Time::now();
+	power_msg_.stamp = rclcpp::Clock().now();
 	power_msg_.current = current;
 	power_msg_.voltage = voltage;
 
 	// Publish the msg
-	power_pub_.publish( power_msg_ );
+	power_pub_->publish( power_msg_ );
 }
