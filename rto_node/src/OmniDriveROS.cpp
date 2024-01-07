@@ -7,17 +7,25 @@
 
 #include "OmniDriveROS.h"
 
-OmniDriveROS::OmniDriveROS()
+using std::placeholders::_1;
+
+OmniDriveROS::OmniDriveROS():
+parent_node(nullptr)
 {
-	cmd_vel_sub_ = nh_.subscribe("cmd_vel", 1, &OmniDriveROS::cmdVelCallback, this);
 }
 
 OmniDriveROS::~OmniDriveROS()
 {
-	cmd_vel_sub_.shutdown();
 }
 
-void OmniDriveROS::cmdVelCallback(const geometry_msgs::TwistConstPtr& msg)
+void OmniDriveROS::setParentNode(const rclcpp::Node::SharedPtr parent_node_ptr)
+{
+	assert(parent_node == nullptr);
+	parent_node = parent_node_ptr;
+	cmd_vel_sub_ = parent_node->create_subscription<geometry_msgs::msg::Twist>("cmd_vel",10,std::bind(&OmniDriveROS::cmdVelCallback, this, _1));
+}
+
+void OmniDriveROS::cmdVelCallback(const geometry_msgs::msg::Twist::SharedPtr msg)
 {
 	double linear_x = msg->linear.x;
 	double linear_y = msg->linear.y;
