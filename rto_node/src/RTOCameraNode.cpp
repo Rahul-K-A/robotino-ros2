@@ -8,17 +8,23 @@
 #include "RTOCameraNode.h"
 #include <sstream>
 
-RTOCameraNode::RTOCameraNode()
-	: nh_("~")
-{
-	nh_.param<std::string>("hostname", hostname_, "172.26.1.1" );
-	nh_.param<int>("cameraNumber", cameraNumber_, 0 );
+using namespace std::chrono_literals;
 
+RTOCameraNode::RTOCameraNode()
+	: Node("rto_camera_node")
+{
+	rclcpp::Parameter hostname_param_;
+	rclcpp::Parameter camera_param_;
+	this->get_parameter_or("hostname", hostname_param_, rclcpp::Parameter("hostname", "172.26.1.1") );
+	this->get_parameter_or("cameraNumber", camera_param_, rclcpp::Parameter("cameraNumber", 0));
+	hostname_ = hostname_param_.as_string();
+	cameraNumber_ = camera_param_.as_int();
 	std::ostringstream os;
 	os << "Camera" << cameraNumber_;
 	com_.setName( os.str() );
 
 	initModules();
+	timer_ = this->create_wall_timer(250ms, std::bind(&RTOCameraNode::timer_callback, this));
 }
 
 RTOCameraNode::~RTOCameraNode()
@@ -33,24 +39,24 @@ void RTOCameraNode::initModules()
 	camera_.setComId( com_.id() );
 
 	// Set the LaserRangeFinder numbers
-	camera_.setNumber( cameraNumber_ );
+	camera_.setNumber( cameraNumber_ , this);
 
 	com_.connectToServer( false );
 }
 
-bool RTOCameraNode::spin()
+void RTOCameraNode::spin()
 {
-	ros::Rate loop_rate( 30 );
+	rclcpp::WallRate loop_rate(200ms);
 
-	while(nh_.ok())
+	while(rclcpp::ok())
 	{
-		ros::Time curr_time = ros::Time::now();
+		rclcpp::Time curr_time = rclcpp::Clock().now();
 		camera_.setTimeStamp(curr_time);
 
 		com_.processEvents();
-		ros::spinOnce();
+		rclcpp::spin_some(shared_from_this());
 		loop_rate.sleep();
 	}
-	return true;
+
 }
 

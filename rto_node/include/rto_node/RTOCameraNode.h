@@ -11,19 +11,17 @@
 #include "ComROS.h"
 #include "CameraROS.h"
 
-#include <ros/ros.h>
+#include "rclcpp/rclcpp.hpp"
 
-class RTOCameraNode
+class RTOCameraNode : rclcpp::Node
 {
 public:
 	RTOCameraNode();
 	~RTOCameraNode();
 
-	bool spin();
+	void spin();
 
 private:
-	ros::NodeHandle nh_;
-
 	std::string hostname_;
 	int cameraNumber_;
 
@@ -31,6 +29,7 @@ private:
 	CameraROS camera_;
 
 	void initModules();
+
 };
 
 #endif /* RTOCameraNode_H */
