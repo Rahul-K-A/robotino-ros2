@@ -6,31 +6,41 @@
  */
 
 #include "OdometryROS.h"
-#include <tf/transform_datatypes.h>
-#include <geometry_msgs/Quaternion.h>
+#include "tf2/transform_datatypes.h"
+#include "tf2/buffer_core.h"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
+#include "geometry_msgs/msg/quaternion.hpp"
 
-OdometryROS::OdometryROS()
+using std::placeholders::_1;
+OdometryROS::OdometryROS(rclcpp::Node* parent_node)
 {
-	odometry_pub_ = nh_.advertise<nav_msgs::Odometry>("odom", 1, true);
+	odometry_pub_ = parent_node->create_publisher<nav_msgs::msg::Odometry>("odom", 10);
 
-	reset_odometry_server_ = nh_.advertiseService("reset_odometry",
-			&OdometryROS::resetOdometryCallback, this);
+	reset_odometry_server_ = parent_node->create_service<rto_msgs::srv::ResetOdometry>("reset_odometry",std::bind(
+			&OdometryROS::resetOdometryCallback, this, _1));
 }
 
 OdometryROS::~OdometryROS()
 {
-	odometry_pub_.shutdown();
-	reset_odometry_server_.shutdown();
+
 }
 
 void OdometryROS::setTimeStamp(rclcpp::Time stamp)
 {
 	stamp_ = stamp;
 }
+
+auto createQuaternionMsgFromYaw(double yaw)
+{
+  tf2::Quaternion q;
+  q.setRPY(0, 0, yaw);
+  return tf2::toMsg(q);
+}
+
 void OdometryROS::readingsEvent(double x, double y, double phi,
 		float vx, float vy, float omega, unsigned int sequence )
 {
-	geometry_msgs::Quaternion phi_quat = tf::createQuaternionMsgFromYaw( phi );
+	geometry_msgs::msg::Quaternion phi_quat = createQuaternionMsgFromYaw( phi );
 
 	// Construct messages
 	odometry_msg_.header.seq = sequence;
@@ -59,14 +69,14 @@ void OdometryROS::readingsEvent(double x, double y, double phi,
 	odometry_transform_broadcaster_.sendTransform( odometry_transform_ );
 
 	// Publish the msg
-	odometry_pub_.publish( odometry_msg_ );
+	odometry_pub_->publish( odometry_msg_ );
 }
 
 bool OdometryROS::resetOdometryCallback(
-		rto_msgs::ResetOdometry::Request &req,
-		rto_msgs::ResetOdometry::Response &res)
+		rto_msgs::srv::ResetOdometry::Request::SharedPtr req,
+		rto_msgs::srv::ResetOdometry::Response::SharedPtr res)
 {
-	set( req.x, req.y, req.phi, true );
+	set( req->x, req->y, req->phi, true );
 
 	return true;
 }
