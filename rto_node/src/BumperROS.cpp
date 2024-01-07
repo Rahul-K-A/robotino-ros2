@@ -6,7 +6,7 @@
  */
 
 
-#include "rto_node/BumperROS.h"
+#include "BumperROS.h"
 
 BumperROS::BumperROS(rclcpp::Node* parent_node)
 {
