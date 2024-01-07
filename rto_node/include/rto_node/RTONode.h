@@ -31,6 +31,7 @@ public:
 	~RTONode();
 
 private:
+	rclcpp::TimerBase::SharedPtr timer_;
 	std::string hostname_;
 	double max_linear_vel_, min_linear_vel_, max_angular_vel_, min_angular_vel_;
 	std::vector<float> motor_velocities_;
@@ -61,7 +62,7 @@ private:
 	void publishJointStateMsg();
 
 public:
-	bool spin();
+	void spin();
 };
 
 #endif /* ROBOTINONODE_H_ */

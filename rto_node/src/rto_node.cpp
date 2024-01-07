@@ -13,7 +13,6 @@
 int main(int argc, char** argv)
 {
 	rclcpp::init(argc, argv);
-	RTONode rn;
-	rn.spin();
+	rclcpp::spin(std::make_shared<RTONode>());
 	return 0;
 }

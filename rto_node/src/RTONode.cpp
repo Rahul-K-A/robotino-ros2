@@ -46,6 +46,7 @@ RTONode::RTONode():
 
 	initModules();
 	initMsgs();
+	timer_ = this->create_wall_timer(200ms, std::bind(&RTONode::spin, this));
 }
 
 RTONode::~RTONode()
@@ -121,28 +122,21 @@ void RTONode::publishJointStateMsg()
 	joint_states_pub_->publish( joint_state_msg_ );
 }
 
-bool RTONode::spin()
+void RTONode::spin()
 {
-	rclcpp::WallRate loop_rate( 200ms );
+	curr_time_ = rclcpp::Clock().now();
+	RCLCPP_INFO(this->get_logger(),"7.1");
+	analog_input_array_.setTimeStamp(curr_time_);
+	RCLCPP_INFO(this->get_logger(),"7.2");
+	digital_input_array_.setTimeStamp(curr_time_);
+	distance_sensor_array_.setTimeStamp(curr_time_);
+	encoder_input_.setTimeStamp(curr_time_);
+	motor_array_.setTimeStamp(curr_time_);
+	//north_star_.setTimeStamp(curr_time_);
+	power_management_.setTimeStamp(curr_time_);
 
-	while(rclcpp::ok())
-	{
-		curr_time_ = rclcpp::Clock().now();
-
-		analog_input_array_.setTimeStamp(curr_time_);
-		digital_input_array_.setTimeStamp(curr_time_);
-		distance_sensor_array_.setTimeStamp(curr_time_);
-		encoder_input_.setTimeStamp(curr_time_);
-		motor_array_.setTimeStamp(curr_time_);
-        //north_star_.setTimeStamp(curr_time_);
-		power_management_.setTimeStamp(curr_time_);
-
-		publishDistanceMsg();
-		publishJointStateMsg();
-		com_.processEvents();
-		rclcpp::spin_some(shared_from_this());
-		loop_rate.sleep();
-	}
-	return true;
+	publishDistanceMsg();
+	publishJointStateMsg();
+	com_.processEvents();
 }
 
