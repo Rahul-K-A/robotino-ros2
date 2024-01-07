@@ -10,8 +10,8 @@
 
 #include "rec/robotino/api2/NorthStar.h"
 
-#include <ros/ros.h>
-#include "rto_msgs/NorthStarReadings.h"
+#include "rclcpp/rclcpp.hpp"
+#include "rto_msgs/msg/north_star_readings.hpp"
 
 class NorthStarROS : public rec::robotino::api2::NorthStar
 {
@@ -20,15 +20,15 @@ public:
 	~NorthStarROS();
 
 	void setTimeStamp(rclcpp::Time stamp);
+	void setParentNode(rclcpp::Node::SharedPtr parent_node_ptr );
 
 private:
-	ros::NodeHandle nh_;
+	rclcpp::Node::SharedPtr parent_node;
+	rclcpp::Publisher<rto_msgs::msg::NorthStarReadings>::SharedPtr north_star_pub_;
 
-	ros::Publisher north_star_pub_;
+	rto_msgs::msg::NorthStarReadings north_star_msg_;
 
-	rto_msgs::NorthStarReadings north_star_msg_;
-
-	ros::Time stamp_;
+	rclcpp::Time stamp_;
 
 	void readingsEvent( const rec::robotino::api2::NorthStarReadings& readings );
 };
