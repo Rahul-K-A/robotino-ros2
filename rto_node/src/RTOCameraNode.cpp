@@ -51,6 +51,5 @@ void RTOCameraNode::spin()
 	camera_.setTimeStamp(curr_time);
 
 	com_.processEvents();
-	rclcpp::spin_some(shared_from_this());
 }
 

@@ -13,15 +13,15 @@
 
 #include "rclcpp/rclcpp.hpp"
 
-class RTOCameraNode : rclcpp::Node
+class RTOCameraNode : public rclcpp::Node
 {
 public:
 	RTOCameraNode();
 	~RTOCameraNode();
 
-	void spin();
 
 private:
+	void spin();
 	rclcpp::TimerBase::SharedPtr timer_;
 	std::string hostname_;
 	int cameraNumber_;
