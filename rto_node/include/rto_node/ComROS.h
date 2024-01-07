@@ -10,7 +10,7 @@
 
 #include "rec/robotino/api2/Com.h"
 
-#include <ros/ros.h>
+#include "rclcpp/rclcpp.hpp"
 #include <string>
 
 class ComROS: public rec::robotino::api2::Com
@@ -20,10 +20,11 @@ public:
 	~ComROS();
 
 	void setName( const std::string& name );
+	void setParentNode( const rclcpp::Node::SharedPtr parent_node_ptr);
 
 private:
 	std::string name_;
-
+	rclcpp::Node::SharedPtr parent_node;
 	void errorEvent( const char* errorString );
 	void connectedEvent();
 	void connectionClosedEvent();

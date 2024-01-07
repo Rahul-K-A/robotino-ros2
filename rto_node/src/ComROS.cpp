@@ -21,24 +21,29 @@ void ComROS::setName( const std::string& name )
 	name_ = name;
 }
 
+void ComROS::setParentNode(const rclcpp::Node::SharedPtr parent_node_ptr)
+{
+	parent_node = parent_node_ptr;
+}
+
 void ComROS::errorEvent( const char* errorString )
 {
 	std::ostringstream os;
 	os << name_ << " : " << errorString;
 
-	ROS_ERROR("%s", os.str().c_str() );
+	RCLCPP_ERROR(parent_node->get_logger(), "%s", os.str().c_str() );
 }
 
 void ComROS::connectedEvent()
 {
 	std::ostringstream os;
 	os << name_ << " connected to RTO.";
-	ROS_INFO("%s", os.str().c_str() );
+	RCLCPP_INFO(parent_node->get_logger(), "%s", os.str().c_str());
 }
 
 void ComROS::connectionClosedEvent()
 {
 	std::ostringstream os;
 	os << name_ << " disconnected from RTO.";
-	ROS_INFO("%s", os.str().c_str() );
+	RCLCPP_INFO(parent_node->get_logger(), "%s", os.str().c_str());
 }
