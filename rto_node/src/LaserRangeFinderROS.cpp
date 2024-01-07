@@ -7,7 +7,7 @@
 
 #include "LaserRangeFinderROS.h"
 
-LaserRangeFinderROS::LaserRangeFinderROS():
+LaserRangeFinderROS::LaserRangeFinderROS()
 {
 	laser_scan_msg_ = sensor_msgs::msg::LaserScan();
 }
