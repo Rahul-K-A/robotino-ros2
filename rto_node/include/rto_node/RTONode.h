@@ -16,7 +16,6 @@
 #include "DistanceSensorArrayROS.h"
 #include "EncoderInputROS.h"
 #include "MotorArrayROS.h"
-#include "NorthStarROS.h"
 #include "OmniDriveROS.h"
 #include "PowerManagementROS.h"
 
@@ -53,7 +52,6 @@ private:
 	DistanceSensorArrayROS distance_sensor_array_;
 	EncoderInputROS encoder_input_;
 	MotorArrayROS motor_array_;
-	//NorthStarROS north_star_;
 	OmniDriveROS omni_drive_;
 	PowerManagementROS power_management_;
 

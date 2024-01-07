@@ -23,6 +23,8 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(nav_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(RobotinoAPI2 REQUIRED)
 find_package(rto_msgs REQUIRED)
@@ -32,6 +34,7 @@ find_package(rto_msgs REQUIRED)
 
 
 include_directories(
+  include/rto_node
   /usr/local/robotino/api2
 )
 
@@ -41,17 +44,13 @@ add_executable(
   src/AnalogInputArrayROS.cpp
   src/BumperROS.cpp
   src/CameraROS.cpp
-  src/CompactBHAROS.cpp
   src/ComROS.cpp
   src/DigitalInputArrayROS.cpp
   src/DigitalOutputArrayROS.cpp
   src/DistanceSensorArrayROS.cpp
-  src/ElectricalGripperROS.cpp
   src/EncoderInputROS.cpp
-  src/GrapplerROS.cpp
   src/LaserRangeFinderROS.cpp
   src/MotorArrayROS.cpp
-  src/NorthStarROS.cpp
   src/OdometryROS.cpp
   src/OmniDriveROS.cpp
   src/PowerManagementROS.cpp
@@ -64,7 +63,7 @@ target_link_libraries(
 )
 
 
-ament_target_dependencies(rto_node rclcpp rto_msgs) 
+ament_target_dependencies(rto_node rclcpp rto_msgs std_msgs geometry_msgs sensor_msgs tf2 tf2_ros nav_msgs) 
 
 add_executable(
   rto_laserrangefinder_node
@@ -74,7 +73,7 @@ add_executable(
   src/RTOLaserRangeFinderNode.cpp
 )
 
-ament_target_dependencies(rto_laserrangefinder_node rclcpp rto_msgs) 
+ament_target_dependencies(rto_laserrangefinder_node rclcpp rto_msgs std_msgs geometry_msgs sensor_msgs tf2 tf2_ros) 
 
 
 target_link_libraries(
@@ -90,7 +89,7 @@ add_executable(
   src/RTOCameraNode.cpp
 )
 
-ament_target_dependencies(rto_camera_node rclcpp rto_msgs) 
+ament_target_dependencies(rto_camera_node rclcpp rto_msgs std_msgs geometry_msgs sensor_msgs tf2 tf2_ros) 
 
 target_link_libraries(
   rto_camera_node

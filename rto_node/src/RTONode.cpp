@@ -64,7 +64,6 @@ void RTONode::initModules()
 	distance_sensor_array_.setComId( com_.id() );
 	encoder_input_.setComId( com_.id() );
 	motor_array_.setComId( com_.id() );
-    //north_star_.setComId( com_.id() );
 	omni_drive_.setComId( com_.id() );
 	power_management_.setComId( com_.id() );
 	omni_drive_.setMaxMin(max_linear_vel_, min_linear_vel_, max_angular_vel_, min_angular_vel_ );
