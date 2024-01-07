@@ -21,15 +21,13 @@ public:
 	CameraROS();
 	~CameraROS();
 
-	void setNumber( int number );
+	void setNumber( int number, rclcpp::Node * parent_node );
 	void setTimeStamp(rclcpp::Time stamp);
 
 private:
-	image_transport::ImageTransport img_transport_;
-	image_transport::CameraPublisher streaming_pub_;
+	rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr streaming_pub_;
 
 	sensor_msgs::msg::Image img_msg_;
-	sensor_msgs::msg::CameraInfo cam_info_msg_;
 
 	rclcpp::Time stamp_;
 

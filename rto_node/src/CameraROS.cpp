@@ -22,14 +22,15 @@ extern bool fillImage(
 
 CameraROS::CameraROS()
 {
+	img_msg_ = sensor_msgs::msg::Image();
 }
 
 CameraROS::~CameraROS()
 {
-	streaming_pub_.shutdown()
 }
 
-void CameraROS::setNumber( int number )
+
+void CameraROS::setNumber( int number, rclcpp::Node * parent_node )
 {
 	std::stringstream topic;
 
@@ -38,7 +39,7 @@ void CameraROS::setNumber( int number )
 	else
 		topic << "image_raw" << number;
 
-	streaming_pub_ = img_transport_.advertiseCamera(topic.str(), 1, false);
+	streaming_pub_ = parent_node->create_publisher<sensor_msgs::msg::Image>(topic.str(),10);
 
 	setCameraNumber( number );
 }
@@ -59,12 +60,7 @@ void CameraROS::imageReceivedEvent(
 	img_msg_.header.stamp = stamp_;
 	sensor_msgs::fillImage(img_msg_, "bgr8", height, width, step, data);
 
-	// Build the CameraInfo msg
-	cam_info_msg_.header.stamp = stamp_;
-	cam_info_msg_.height = height;
-	cam_info_msg_.width = width;
-
 	// Publish the Image & CameraInfo msgs
-	streaming_pub_.publish(img_msg_, cam_info_msg_);
+	streaming_pub_->publish(img_msg_);
 
 }
