@@ -9,9 +9,8 @@
 #define DIGITALINPUTARRAYROS_H_
 
 #include "rec/robotino/api2/DigitalInputArray.h"
-
-#include <ros/ros.h>
-#include "rto_msgs/DigitalReadings.h"
+#include "rclcpp/rclcpp.hpp"
+#include "rto_msgs/msg/digital_readings.hpp"
 
 class DigitalInputArrayROS: public rec::robotino::api2::DigitalInputArray
 {
@@ -22,13 +21,11 @@ public:
 	void setTimeStamp(rclcpp::Time stamp);
 
 private:
-	ros::NodeHandle nh_;
+	rclcpp::Publisher<rto_msgs::msg::DigitalReadings>::SharedPtr digital_pub_;
 
-	ros::Publisher digital_pub_;
+	rto_msgs::msg::DigitalReadings digital_msg_;
 
-	rto_msgs::DigitalReadings digital_msg_;
-
-	ros::Time stamp_;
+	rclcpp::Time stamp_;
 
 	void valuesChangedEvent( const int* values, unsigned int size );
 

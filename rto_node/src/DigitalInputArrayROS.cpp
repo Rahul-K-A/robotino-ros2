@@ -9,12 +9,12 @@
 
 DigitalInputArrayROS::DigitalInputArrayROS()
 {
-	digital_pub_ = nh_.advertise<rto_msgs::DigitalReadings>("digital_readings", 1, true);
+	//digital_pub_ = nh_.advertise<rto_msgs::DigitalReadings>("digital_readings", 1, true);
+	digital_msg_ = rto_msgs::msg::DigitalReadings();
 }
 
 DigitalInputArrayROS::~DigitalInputArrayROS()
 {
-	digital_pub_.shutdown();
 }
 
 void DigitalInputArrayROS::setTimeStamp(rclcpp::Time stamp)
@@ -35,7 +35,7 @@ void DigitalInputArrayROS::valuesChangedEvent( const int* values, unsigned int s
             digital_msg_.values[idx] = (bool)values[idx];
         }
 		// Publish the msg
-		digital_pub_.publish( digital_msg_ );
+		digital_pub_->publish( digital_msg_ );
 	}
 
 }
