@@ -7,14 +7,21 @@
 
 #include "MotorArrayROS.h"
 
-MotorArrayROS::MotorArrayROS()
+MotorArrayROS::MotorArrayROS():
+parent_node(nullptr)
 {
-	motor_pub_ = nh_.advertise<rto_msgs::MotorReadings>("motor_readings", 1, true);
+	motor_msg_ = rto_msgs::msg::MotorReadings();
 }
 
 MotorArrayROS::~MotorArrayROS()
 {
-	motor_pub_.shutdown();
+}
+
+void MotorArrayROS::setParentNode(const rclcpp::Node::SharedPtr parent_node_ptr)
+{
+	assert(parent_node == nullptr);
+	parent_node = parent_node_ptr;
+	motor_pub_ = parent_node->create_publisher<rto_msgs::msg::MotorReadings>("motor_readings", 10); 
 }
 
 void MotorArrayROS::setTimeStamp(rclcpp::Time stamp)
@@ -62,5 +69,5 @@ void MotorArrayROS::currentsChangedEvent( const float* currents, unsigned int si
 	}
 
 	// Publish the msg
-	motor_pub_.publish( motor_msg_ );
+	motor_pub_->publish( motor_msg_ );
 }

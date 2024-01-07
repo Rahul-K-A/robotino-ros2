@@ -9,9 +9,8 @@
 #define MOTORARRAYROS_H_
 
 #include "rec/robotino/api2/MotorArray.h"
-
-#include <ros/ros.h>
-#include "rto_msgs/MotorReadings.h"
+#include "rclcpp/rclcpp.hpp"
+#include "rto_msgs/msg/motor_readings.h"
 
 class MotorArrayROS : public rec::robotino::api2::MotorArray
 {
@@ -21,15 +20,15 @@ public:
 
 	void setTimeStamp(rclcpp::Time stamp);
 	void getMotorReadings(std::vector<float> &velocities, std::vector<int> &positions );
+	void setParentNode(const rclcpp::Node::SharedPtr parent_node_ptr);
 
 private:
-	ros::NodeHandle nh_;
+	rclcpp::Node::SharedPtr parent_node;
+	rclcpp::Publisher<rto_msgs::msg::MotorReadings> motor_pub_;
 
-	ros::Publisher motor_pub_;
+	rto_msgs::msg::MotorReadings motor_msg_;
 
-	rto_msgs::MotorReadings motor_msg_;
-
-	ros::Time stamp_;
+	rclcpp::Time stamp_;
 
 	void velocitiesChangedEvent( const float* velocities, unsigned int size );
 	void positionsChangedEvent( const float* positions, unsigned int size );
