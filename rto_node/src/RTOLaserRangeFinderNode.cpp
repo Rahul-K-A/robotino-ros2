@@ -24,6 +24,7 @@ RTOLaserRangeFinderNode::RTOLaserRangeFinderNode():
 	com_.setName( os.str() );
 
 	initModules();
+	timer_ = this->create_wall_timer(200ms, std::bind(&RTOLaserRangeFinderNode::spin, this));
 }
 
 RTOLaserRangeFinderNode::~RTOLaserRangeFinderNode()
@@ -45,16 +46,9 @@ void RTOLaserRangeFinderNode::initModules()
 
 void RTOLaserRangeFinderNode::spin()
 {
-	rclcpp::WallRate loop_rate(200ms);
+	rclcpp::Time curr_time = rclcpp::Clock().now();
+	laser_range_finder_.setTimeStamp(curr_time);
 
-	while(rclcpp::ok())
-	{
-		rclcpp::Time curr_time = rclcpp::Clock().now();
-		laser_range_finder_.setTimeStamp(curr_time);
-
-		com_.processEvents();
-		rclcpp::spin_some(shared_from_this());
-		loop_rate.sleep();
-	}
+	com_.processEvents();
 }
 

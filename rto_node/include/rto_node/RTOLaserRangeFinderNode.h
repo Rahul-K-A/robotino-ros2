@@ -19,15 +19,15 @@ public:
 	RTOLaserRangeFinderNode();
 	~RTOLaserRangeFinderNode();
 
-	void spin();
 
 private:
+	rclcpp::TimerBase::SharedPtr timer_;
 	std::string hostname_;
 	int laserRangeFinderNumber_;
 
 	ComROS com_;
 	LaserRangeFinderROS laser_range_finder_;
-
+	void spin();
 	void initModules();
 };
 
