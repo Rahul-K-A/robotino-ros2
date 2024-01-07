@@ -37,14 +37,13 @@ void RTOLaserRangeFinderNode::initModules()
 	laser_range_finder_.setComId( com_.id() );
 
 	// Set the LaserRangeFinder numbers
-	laser_range_finder_.setNumber( laserRangeFinderNumber_ );
+	laser_range_finder_.setNumber( laserRangeFinderNumber_, this );
 
 	com_.connectToServer( false );
 }
 
 void RTOLaserRangeFinderNode::spin()
 {
-	laser_range_finder_.setParentNode(shared_from_this());
 	rclcpp::WallRate loop_rate(200ms);
 
 	while(rclcpp::ok())
