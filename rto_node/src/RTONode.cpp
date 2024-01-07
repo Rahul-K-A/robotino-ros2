@@ -16,11 +16,11 @@ RTONode::RTONode():
 	com_(),
 	digital_input_array_(this),
 	digital_output_array_(this),
+	distance_sensor_array_(this),
 	encoder_input_(this),
 	motor_array_(this),
 	omni_drive_(this),
-	power_management_(this),
-	distance_sensor_array_(this)
+	power_management_(this)
 {
 	rclcpp::Parameter hostname_param_;
 	rclcpp::Parameter max_lin_vel_param_;
