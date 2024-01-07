@@ -7,20 +7,13 @@
 
 #include "PowerManagementROS.h"
 
-PowerManagementROS::PowerManagementROS():
-parent_node(nullptr)
+PowerManagementROS::PowerManagementROS(rclcpp::Node* parent_node)
 {
+	power_pub_ = parent_node->create_publisher<rto_msgs::msg::PowerReadings>("power_readings", 10);
 }
 
 PowerManagementROS::~PowerManagementROS()
 {
-}
-
-void PowerManagementROS::setParentNode(const rclcpp::Node::SharedPtr parent_node_ptr)
-{
-	assert(parent_node == nullptr);
-	parent_node = parent_node_ptr;
-	power_pub_ = parent_node->create_publisher<rto_msgs::msg::PowerReadings>("power_readings", 10);
 }
 
 void PowerManagementROS::setTimeStamp(rclcpp::Time stamp)

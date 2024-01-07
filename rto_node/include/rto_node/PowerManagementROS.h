@@ -16,15 +16,13 @@
 class PowerManagementROS: public rec::robotino::api2::PowerManagement
 {
 public:
-	PowerManagementROS();
+	PowerManagementROS(rclcpp::Node* parent_node);
 	~PowerManagementROS();
 
 	void setTimeStamp(rclcpp::Time stamp);
-	void setParentNode(const rclcpp::Node::SharedPtr parent_node_ptr);
 
 
 private:
-	rclcpp::Node::SharedPtr parent_node;
 	rclcpp::Publisher<rto_msgs::msg::PowerReadings>::SharedPtr power_pub_;
 
 	rto_msgs::msg::PowerReadings power_msg_;
