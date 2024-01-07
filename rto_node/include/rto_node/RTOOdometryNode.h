@@ -19,10 +19,11 @@ public:
 	RTOOdometryNode();
 	~RTOOdometryNode();
 
-	bool spin();
 
 private:
+	void spin();
 
+	rclcpp::TimerBase::SharedPtr timer_;
 	std::string hostname_;
 
 	ComROS com_;

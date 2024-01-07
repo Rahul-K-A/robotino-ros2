@@ -19,6 +19,7 @@ Node( "rto_odometry_node")
 	com_.setName( "Odometry" );
 
 	initModules();
+	timer_ = this->create_wall_timer(200ms,std::bind(&RTOOdometryNode::spin, this))
 }
 
 RTOOdometryNode::~RTOOdometryNode()
@@ -35,19 +36,11 @@ void RTOOdometryNode::initModules()
 	com_.connectToServer( false );
 }
 
-bool RTOOdometryNode::spin()
+void RTOOdometryNode::spin()
 {
-	rclcpp::WallRate loop_rate( 200ms );
+	rclcpp::Time curr_time = rclcpp::Clock().now();
+	odometry_.setTimeStamp(curr_time);
 
-	while(rclcpp::ok())
-	{
-		rclcpp::Time curr_time = rclcpp::Clock().now();
-		odometry_.setTimeStamp(curr_time);
-
-		com_.processEvents();
-		rclcpp::spin_some(shared_from_this());
-		loop_rate.sleep();
-	}
-	return true;
+	com_.processEvents();
 }
 

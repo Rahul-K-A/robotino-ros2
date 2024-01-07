@@ -12,7 +12,6 @@
 int main(int argc, char** argv)
 {
 	rclcpp::init(argc, argv);
-	RTOOdometryNode rn;
-	rn.spin();
+	rclcpp::spin(std::make_shared<RTOOdometryNode>());
 	return 0;
 }
