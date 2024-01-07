@@ -6,18 +6,23 @@
  */
 
 #include "EncoderInputROS.h"
+using std::placeholders::_1;
 
 EncoderInputROS::EncoderInputROS()
+: parent_node(nullptr)
 {
-	encoder_pub_ = nh_.advertise<rto_msgs::EncoderReadings>("encoder_readings", 1, true);
-	encoder_position_server_ = nh_.advertiseService("set_encoder_position",
-			&EncoderInputROS::setEncoderPositionCallback, this);
+}
+
+void EncoderInputROS::setParentNode(const rclcpp::Node::SharedPtr parent_node_ptr)
+{
+	assert(parent_node == nullptr);
+	parent_node = parent_node_ptr;
+	encoder_pub_ = parent_node->create_publisher<rto_msgs::msg::EncoderReadings>("encoder_readings", 10);
+	encoder_position_server_ = parent_node->create_service<rto_msgs::srv::SetEncoderPosition>("set_encoder_position", std::bind(&EncoderInputROS::setEncoderPositionCallback, this, _1));
 }
 
 EncoderInputROS::~EncoderInputROS()
 {
-	encoder_pub_.shutdown();
-	encoder_position_server_.shutdown();
 }
 
 void EncoderInputROS::setTimeStamp(rclcpp::Time stamp)
@@ -34,14 +39,14 @@ void EncoderInputROS::readingsChangedEvent( int velocity, int position, float cu
 	encoder_msg_.current = current;
 
 	// Publish the msg
-	encoder_pub_.publish( encoder_msg_ );
+	encoder_pub_->publish( encoder_msg_ );
 }
 
-bool EncoderInputROS::setEncoderPositionCallback(
-			rto_msgs::SetEncoderPosition::Request& req,
-			rto_msgs::SetEncoderPosition::Response& res)
+bool setEncoderPositionCallback(
+		const std::shared_ptr<rto_msgs::srv::SetEncoderPosition::Request> req,
+		const std::shared_ptr<rto_msgs::srv::SetEncoderPosition::Response> res)
 {
-	setPosition( req.position ,req.velocity );
+	setPosition( req->position, req->velocity );
 
 	return true;
 }

@@ -10,9 +10,9 @@
 
 #include "rec/robotino/api2/EncoderInput.h"
 
-#include <ros/ros.h>
-#include "rto_msgs/EncoderReadings.h"
-#include "rto_msgs/SetEncoderPosition.h"
+#include "rclcpp/rclcpp.hpp"
+#include "rto_msgs/msg/encoder_readings.hpp"
+#include "rto_msgs/srv/set_encoder_position.hpp"
 
 
 class EncoderInputROS: public rec::robotino::api2::EncoderInput
@@ -21,24 +21,24 @@ public:
 	EncoderInputROS();
 	~EncoderInputROS();
 
+	void setParentNode(const rclcpp::Node::SharedPtr parent_node);
 	void setTimeStamp(rclcpp::Time stamp);
 
 private:
-	ros::NodeHandle nh_;
+	rclcpp::Node::SharedPtr parent_node;
+	rclcpp::Publisher<rto_msgs::msg::EncoderReadings>::SharedPtr encoder_pub_;
 
-	ros::Publisher encoder_pub_;
+	rclcpp::Service<rto_msgs::srv::SetEncoderPosition>::SharedPtr encoder_position_server_;
 
-	ros::ServiceServer encoder_position_server_;
+	rto_msgs::msg::EncoderReadings encoder_msg_;
 
-	rto_msgs::EncoderReadings encoder_msg_;
-
-	ros::Time stamp_;
+	rclcpp::Time stamp_;
 
 	void readingsChangedEvent( int velocity, int position, float current );
 
 	bool setEncoderPositionCallback(
-			rto_msgs::SetEncoderPosition::Request& req,
-			rto_msgs::SetEncoderPosition::Response& res);
+			const std::shared_ptr<rto_msgs::srv::SetEncoderPosition::Request> req,
+			const std::shared_ptr<rto_msgs::srv::SetEncoderPosition::Response> res);
 };
 
 #endif /* ENCODERINPUTROS_H_ */
