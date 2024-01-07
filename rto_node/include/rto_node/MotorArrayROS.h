@@ -10,7 +10,7 @@
 
 #include "rec/robotino/api2/MotorArray.h"
 #include "rclcpp/rclcpp.hpp"
-#include "rto_msgs/msg/motor_readings.h"
+#include "rto_msgs/msg/motor_readings.hpp"
 
 class MotorArrayROS : public rec::robotino::api2::MotorArray
 {
