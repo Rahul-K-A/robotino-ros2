@@ -15,7 +15,7 @@
 class MotorArrayROS : public rec::robotino::api2::MotorArray
 {
 public:
-	MotorArrayROS();
+	MotorArrayROS(rclcpp::Node* parent_node);
 	~MotorArrayROS();
 
 	void setTimeStamp(rclcpp::Time stamp);
@@ -24,7 +24,7 @@ public:
 
 private:
 	rclcpp::Node::SharedPtr parent_node;
-	rclcpp::Publisher<rto_msgs::msg::MotorReadings> motor_pub_;
+	rclcpp::Publisher<rto_msgs::msg::MotorReadings>::SharedPtr motor_pub_;
 
 	rto_msgs::msg::MotorReadings motor_msg_;
 
