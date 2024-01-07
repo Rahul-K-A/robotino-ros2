@@ -7,11 +7,13 @@
 
 #include "EncoderInputROS.h"
 using std::placeholders::_1;
+using std::placeholders::_2;
+
 
 EncoderInputROS::EncoderInputROS(rclcpp::Node* parent_node)
 {
 	encoder_pub_ = parent_node->create_publisher<rto_msgs::msg::EncoderReadings>("encoder_readings", 10);
-	encoder_position_server_ = parent_node->create_service<rto_msgs::srv::SetEncoderPosition>("set_encoder_position", std::bind(&EncoderInputROS::setEncoderPositionCallback, this, _1));
+	encoder_position_server_ = parent_node->create_service<rto_msgs::srv::SetEncoderPosition>("set_encoder_position", std::bind(&EncoderInputROS::setEncoderPositionCallback, this, _1, _2));
 }
 
 

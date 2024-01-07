@@ -12,13 +12,14 @@
 #include "geometry_msgs/msg/quaternion.hpp"
 
 using std::placeholders::_1;
+using std::placeholders::_2;
+
 OdometryROS::OdometryROS(rclcpp::Node* parent_node):
 	odometry_transform_broadcaster_(parent_node)
 {
 	odometry_pub_ = parent_node->create_publisher<nav_msgs::msg::Odometry>("odom", 10);
 
-	reset_odometry_server_ = parent_node->create_service<rto_msgs::srv::ResetOdometry>("reset_odometry",std::bind(
-			&OdometryROS::resetOdometryCallback, this, _1));
+	reset_odometry_server_ = parent_node->create_service<rto_msgs::srv::ResetOdometry>("reset_odometry",std::bind(&OdometryROS::resetOdometryCallback, this, _1, _2));
 }
 
 OdometryROS::~OdometryROS()
