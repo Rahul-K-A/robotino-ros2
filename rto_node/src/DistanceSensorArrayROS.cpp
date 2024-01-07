@@ -8,9 +8,9 @@
 #include "DistanceSensorArrayROS.h"
 #include <cmath>
 
-DistanceSensorArrayROS::DistanceSensorArrayROS()
+DistanceSensorArrayROS::DistanceSensorArrayROS(rclcpp::Node* parent_node)
 {
-	distances_pub_ = nh_.advertise<sensor_msgs::PointCloud>("distance_sensors", 1, true);
+	distances_pub_ = parent_node->create_publisher<sensor_msgs::msg::PointCloud>("distance_sensors", 10);
 }
 
 DistanceSensorArrayROS::~DistanceSensorArrayROS()

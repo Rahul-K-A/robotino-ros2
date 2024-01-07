@@ -15,7 +15,7 @@
 class DistanceSensorArrayROS: public rec::robotino::api2::DistanceSensorArray
 {
 public:
-	DistanceSensorArrayROS();
+	DistanceSensorArrayROS(rclcpp::Node* parent_node);
 	~DistanceSensorArrayROS();
 
 	void setTimeStamp(rclcpp::Time stamp);
