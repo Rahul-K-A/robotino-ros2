@@ -7,10 +7,10 @@
 
 #include "DigitalOutputArrayROS.h"
 
-DigitalOutputArrayROS::DigitalOutputArrayROS()
+using std::placeholders::_1;
+DigitalOutputArrayROS::DigitalOutputArrayROS(rclcpp::Node * parent_node)
 {
-	digital_sub_ = nh_.subscribe("set_digital_values", 1,
-			&DigitalOutputArrayROS::setDigitalValuesCallback, this);
+	digital_sub_ = parent_node->create_subscription<rto_msgs::msg::DigitalReadings>("set_digital_values", 10, std::bind(&DigitalOutputArrayROS::setDigitalValuesCallback, this, _1));
 }
 
 DigitalOutputArrayROS::~DigitalOutputArrayROS()
@@ -22,9 +22,12 @@ void DigitalOutputArrayROS::setDigitalValuesCallback( const rto_msgs::msg::Digit
 	int numValues = msg->values.size();
 	if( numValues > 0 )
 	{
-		bool values[numValues];
+		int values[numValues];
 
-		memcpy( values, msg->values.data(), numValues * sizeof(bool) );
-		//setValues( values, numValues );
+		for(uint8_t entry = 0; entry < numValues; entry++)
+		{
+			values[entry] = msg->values[entry];
+		}
+		setValues( values, numValues );
 	}
 }

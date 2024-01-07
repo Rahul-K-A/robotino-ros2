@@ -15,7 +15,7 @@
 class DigitalOutputArrayROS: public rec::robotino::api2::DigitalOutputArray
 {
 public:
-	DigitalOutputArrayROS();
+	DigitalOutputArrayROS(rclcpp::Node* parent_node);
 	~DigitalOutputArrayROS();
 
 private:
