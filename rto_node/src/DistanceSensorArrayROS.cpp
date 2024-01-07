@@ -15,7 +15,6 @@ DistanceSensorArrayROS::DistanceSensorArrayROS()
 
 DistanceSensorArrayROS::~DistanceSensorArrayROS()
 {
-	distances_pub_.shutdown();
 }
 
 void DistanceSensorArrayROS::setTimeStamp(rclcpp::Time stamp)
@@ -40,5 +39,5 @@ void DistanceSensorArrayROS::distancesChangedEvent(const float* distances, unsig
 	}
 
 	// Publish the msg
-	distances_pub_.publish(distances_msg_);
+	distances_pub_->publish(distances_msg_);
 }
