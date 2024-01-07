@@ -17,13 +17,11 @@
 class BumperROS: public rec::robotino::api2::Bumper
 {
 public:
-	BumperROS();
-	BumperROS(rclcpp::Node::SharedPtr parent_node_ptr);
+	BumperROS(rclcpp::Node* parent_node);
 	~BumperROS();
 	void setParentNode( rclcpp::Node::SharedPtr parent_node_ptr);
 
 private:
-	rclcpp::Node::SharedPtr parent_node;
 	std_msgs::msg::Bool bumper_msg_;
 	rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr bumper_pub_;
 
