@@ -22,6 +22,11 @@ void AnalogInputArrayROS::setTimeStamp(rclcpp::Time stamp)
 	stamp_ = stamp;
 }
 
+void AnalogInputArrayROS::setParentNode(const rclcpp::Node::SharedPtr parent_node_ptr)
+{
+	parent_node = parent_node_ptr;
+}
+
 void AnalogInputArrayROS::valuesChangedEvent( const float* values, unsigned int size )
 {
 	// Build the AnalogReadings msg

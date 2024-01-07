@@ -9,12 +9,16 @@
 #include "rto_node/BumperROS.h"
 
 BumperROS::BumperROS()
-: Node("rto_bumper_node")
 {
 
 	//bumper_pub_ = this->create_publisher<std_msgs::msg::Bool>("bumper", 10);
 	bumper_msg_ = std_msgs::msg::Bool();
 
+}
+
+void BumperROS::setParentNode(const rclcpp::Node::SharedPtr parent_node_ptr)
+{
+	parent_node = parent_node_ptr;
 }
 
 BumperROS::~BumperROS()

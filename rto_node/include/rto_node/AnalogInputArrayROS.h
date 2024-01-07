@@ -19,8 +19,11 @@ public:
 	~AnalogInputArrayROS();
 
 	void setTimeStamp(rclcpp::Time stamp);
+	void setParentNode( rclcpp::Node::SharedPtr parent_node_ptr);
 
 private:
+	rclcpp::Node::SharedPtr parent_node;
+	
 	rclcpp::Publisher<rto_msgs::msg::AnalogReadings>::SharedPtr analog_pub_;
 
 	rto_msgs::msg::AnalogReadings analog_msg_;
