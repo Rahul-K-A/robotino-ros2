@@ -9,9 +9,8 @@
 #define DIGITALOUTPUTARRAYROS_H_
 
 #include "rec/robotino/api2/DigitalOutputArray.h"
-
-#include <ros/ros.h>
-#include "rto_msgs/DigitalReadings.h"
+#include "rclcpp/rclcpp.hpp"
+#include "rto_msgs/msg/digital_readings.hpp"
 
 class DigitalOutputArrayROS: public rec::robotino::api2::DigitalOutputArray
 {
@@ -20,11 +19,10 @@ public:
 	~DigitalOutputArrayROS();
 
 private:
-	ros::NodeHandle nh_;
 
-	ros::Subscriber digital_sub_;
+	rclcpp::Subscription<rto_msgs::msg::DigitalReadings>::SharedPtr digital_sub_;
 
-	void setDigitalValuesCallback( const rto_msgs::DigitalReadingsConstPtr& msg);
+	void setDigitalValuesCallback( const rto_msgs::msg::DigitalReadings::SharedPtr msg);
 
 };
 

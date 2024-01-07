@@ -15,10 +15,9 @@ DigitalOutputArrayROS::DigitalOutputArrayROS()
 
 DigitalOutputArrayROS::~DigitalOutputArrayROS()
 {
-	digital_sub_.shutdown();
 }
 
-void DigitalOutputArrayROS::setDigitalValuesCallback( const rto_msgs::DigitalReadingsConstPtr& msg)
+void DigitalOutputArrayROS::setDigitalValuesCallback( const rto_msgs::msg::DigitalReadings::SharedPtr msg)
 {
 	int numValues = msg->values.size();
 	if( numValues > 0 )
