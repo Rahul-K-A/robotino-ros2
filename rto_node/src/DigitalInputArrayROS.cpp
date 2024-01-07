@@ -7,9 +7,9 @@
 
 #include "DigitalInputArrayROS.h"
 
-DigitalInputArrayROS::DigitalInputArrayROS()
+DigitalInputArrayROS::DigitalInputArrayROS(rclcpp::Node* parent_node)
 {
-	//digital_pub_ = nh_.advertise<rto_msgs::DigitalReadings>("digital_readings", 1, true);
+	digital_pub_ = parent_node->create_publisher<rto_msgs::msg::DigitalReadings>("digital_readings", 10);
 	digital_msg_ = rto_msgs::msg::DigitalReadings();
 }
 

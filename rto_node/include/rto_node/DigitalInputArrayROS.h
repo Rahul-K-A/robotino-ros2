@@ -15,7 +15,7 @@
 class DigitalInputArrayROS: public rec::robotino::api2::DigitalInputArray
 {
 public:
-	DigitalInputArrayROS();
+	DigitalInputArrayROS(rclcpp::Node* parent_node);
 	~DigitalInputArrayROS();
 
 	void setTimeStamp(rclcpp::Time stamp);
