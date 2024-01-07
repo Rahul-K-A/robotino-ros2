@@ -8,11 +8,10 @@
 
 #include "RTOLaserRangeFinderNode.h"
 
-#include <ros/ros.h>
 
 int main(int argc, char** argv)
 {
-	ros::init(argc, argv, "rto_laserrangefinder_node");
+	rclcpp::init(argc, argv);
 	RTOLaserRangeFinderNode rn;
 	rn.spin();
 	return 0;

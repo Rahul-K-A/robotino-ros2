@@ -7,13 +7,17 @@
 
 #include "RTOLaserRangeFinderNode.h"
 #include <sstream>
+using namespace std::chrono_literals;
 
 RTOLaserRangeFinderNode::RTOLaserRangeFinderNode()
-	: nh_("~")
+	: Node("rto_laserrangefinder_node")
 {
-	nh_.param<std::string>("hostname", hostname_, "172.26.1.1" );
-	nh_.param<int>("laserRangeFinderNumber", laserRangeFinderNumber_, 0 );
-
+	rclcpp::Parameter hostname_param_;
+	rclcpp::Parameter laser_range_finder_number_param_;
+	this->get_parameter_or("hostname", hostname_param_, rclcpp::Parameter("hostname", "172.26.1.1") );
+	this->get_parameter_or("laserRangeFinderNumber", laser_range_finder_number_param_, rclcpp::Parameter("laserRangeFinderNumber", 0));
+	hostname_ = hostname_param_.as_string();
+	laserRangeFinderNumber_ = laser_range_finder_number_param_.as_int();
 	std::ostringstream os;
 	os << "LaserRangeFinder" << laserRangeFinderNumber_;
 	com_.setName( os.str() );
@@ -38,19 +42,19 @@ void RTOLaserRangeFinderNode::initModules()
 	com_.connectToServer( false );
 }
 
-bool RTOLaserRangeFinderNode::spin()
+void RTOLaserRangeFinderNode::spin()
 {
-	ros::Rate loop_rate( 30 );
+	laser_range_finder_.setParentNode(shared_from_this());
+	rclcpp::WallRate loop_rate(200ms);
 
-	while(nh_.ok())
+	while(rclcpp::ok())
 	{
-		ros::Time curr_time = ros::Time::now();
+		rclcpp::Time curr_time = rclcpp::Clock().now();
 		laser_range_finder_.setTimeStamp(curr_time);
 
 		com_.processEvents();
-		ros::spinOnce();
+		rclcpp::spin_some(shared_from_this());
 		loop_rate.sleep();
 	}
-	return true;
 }
 

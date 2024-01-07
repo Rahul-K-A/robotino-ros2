@@ -11,19 +11,17 @@
 #include "ComROS.h"
 #include "LaserRangeFinderROS.h"
 
-#include <ros/ros.h>
+#include "rclcpp/rclcpp.hpp"
 
-class RTOLaserRangeFinderNode
+class RTOLaserRangeFinderNode : public rclcpp::Node
 {
 public:
 	RTOLaserRangeFinderNode();
 	~RTOLaserRangeFinderNode();
 
-	bool spin();
+	void spin();
 
 private:
-	ros::NodeHandle nh_;
-
 	std::string hostname_;
 	int laserRangeFinderNumber_;
 
