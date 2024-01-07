@@ -8,18 +8,12 @@
 #include "EncoderInputROS.h"
 using std::placeholders::_1;
 
-EncoderInputROS::EncoderInputROS()
-: parent_node(nullptr)
+EncoderInputROS::EncoderInputROS(rclcpp::Node* parent_node)
 {
-}
-
-void EncoderInputROS::setParentNode(const rclcpp::Node::SharedPtr parent_node_ptr)
-{
-	assert(parent_node == nullptr);
-	parent_node = parent_node_ptr;
 	encoder_pub_ = parent_node->create_publisher<rto_msgs::msg::EncoderReadings>("encoder_readings", 10);
 	encoder_position_server_ = parent_node->create_service<rto_msgs::srv::SetEncoderPosition>("set_encoder_position", std::bind(&EncoderInputROS::setEncoderPositionCallback, this, _1));
 }
+
 
 EncoderInputROS::~EncoderInputROS()
 {
@@ -42,7 +36,7 @@ void EncoderInputROS::readingsChangedEvent( int velocity, int position, float cu
 	encoder_pub_->publish( encoder_msg_ );
 }
 
-bool setEncoderPositionCallback(
+bool EncoderInputROS::setEncoderPositionCallback(
 		const std::shared_ptr<rto_msgs::srv::SetEncoderPosition::Request> req,
 		const std::shared_ptr<rto_msgs::srv::SetEncoderPosition::Response> res)
 {

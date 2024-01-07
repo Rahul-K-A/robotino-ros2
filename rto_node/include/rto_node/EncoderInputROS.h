@@ -18,14 +18,12 @@
 class EncoderInputROS: public rec::robotino::api2::EncoderInput
 {
 public:
-	EncoderInputROS();
+	EncoderInputROS(rclcpp::Node* parent_node);
 	~EncoderInputROS();
 
-	void setParentNode(const rclcpp::Node::SharedPtr parent_node);
 	void setTimeStamp(rclcpp::Time stamp);
 
 private:
-	rclcpp::Node::SharedPtr parent_node;
 	rclcpp::Publisher<rto_msgs::msg::EncoderReadings>::SharedPtr encoder_pub_;
 
 	rclcpp::Service<rto_msgs::srv::SetEncoderPosition>::SharedPtr encoder_position_server_;
