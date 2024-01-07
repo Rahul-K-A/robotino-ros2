@@ -12,7 +12,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "rto_msgs/msg/analog_readings.hpp"
 
-class AnalogInputArrayROS: public rec::robotino::api2::AnalogInputArray, public rclcpp::Node
+class AnalogInputArrayROS: public rec::robotino::api2::AnalogInputArray
 {
 public:
 	AnalogInputArrayROS();

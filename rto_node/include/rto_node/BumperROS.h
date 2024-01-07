@@ -14,7 +14,7 @@
 #include "rec/robotino/api2/Bumper.h"
 
 
-class BumperROS: public rec::robotino::api2::Bumper, rclcpp::Node
+class BumperROS: public rec::robotino::api2::Bumper
 {
 public:
 	BumperROS();

@@ -9,7 +9,7 @@
 
 AnalogInputArrayROS::AnalogInputArrayROS()
 {
-	analog_pub_ = this->create_publisher<rto_msgs::msg::AnalogReadings>("analog_readings", 10);
+	//analog_pub_ = this->create_publisher<rto_msgs::msg::AnalogReadings>("analog_readings", 10);
 	analog_msg_ = rto_msgs::msg::AnalogReadings();
 }
 

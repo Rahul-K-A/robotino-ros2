@@ -15,7 +15,7 @@
 #include "sensor_msgs/msg/camera_info.hpp"
 #include <image_transport/image_transport.h>
 
-class CameraROS : public rec::robotino::api2::Camera, rclcpp::Node
+class CameraROS : public rec::robotino::api2::Camera
 {
 public:
 	CameraROS();
