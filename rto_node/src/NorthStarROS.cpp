@@ -9,11 +9,12 @@
 
 #include "tf2/transform_datatypes.h"
 #include "tf2/buffer_core.h"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 #include "geometry_msgs/msg/quaternion.hpp"
 
-NorthStarROS::NorthStarROS()
-: parent_node(nullptr)
+NorthStarROS::NorthStarROS(rclcpp::Node* parent_node)
 {
+	north_star_pub_ = parent_node->create_publisher<rto_msgs::msg::NorthStarReadings>("north_star", 10);
 }
 
 
@@ -21,14 +22,6 @@ NorthStarROS::NorthStarROS()
 void NorthStarROS::setTimeStamp(rclcpp::Time stamp)
 {
 	stamp_ = stamp;
-}
-
-void NorthStarROS::setParentNode(rclcpp::Node::SharedPtr parent_node_ptr)
-{
-	assert(parent_node == nullptr);
-	parent_node = parent_node_ptr;
-	north_star_pub_ = parent_node->create_publisher<rto_msgs::msg::NorthStarReadings>("north_star", 10);
-
 }
 
 auto createQuaternionMsgFromYaw(double yaw)

@@ -16,11 +16,10 @@
 class NorthStarROS : public rec::robotino::api2::NorthStar
 {
 public:
-	NorthStarROS();
+	NorthStarROS(rclcpp::Node* parent_node);
 	~NorthStarROS();
 
 	void setTimeStamp(rclcpp::Time stamp);
-	void setParentNode(rclcpp::Node::SharedPtr parent_node_ptr );
 
 private:
 	rclcpp::Node::SharedPtr parent_node;
