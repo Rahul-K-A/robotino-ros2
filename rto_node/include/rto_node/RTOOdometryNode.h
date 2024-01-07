@@ -11,9 +11,9 @@
 #include "ComROS.h"
 #include "OdometryROS.h"
 
-#include <ros/ros.h>
+#include "rclcpp/rclcpp.hpp"
 
-class RTOOdometryNode
+class RTOOdometryNode: public rclcpp::Node
 {
 public:
 	RTOOdometryNode();
@@ -22,7 +22,6 @@ public:
 	bool spin();
 
 private:
-	ros::NodeHandle nh_;
 
 	std::string hostname_;
 

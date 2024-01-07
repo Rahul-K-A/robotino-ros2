@@ -7,11 +7,14 @@
 
 #include "RTOOdometryNode.h"
 
-RTOOdometryNode::RTOOdometryNode()
-	: nh_("~")
-{
-	nh_.param<std::string>("hostname", hostname_, "172.26.1.1" );
+using namespace std::chrono_literals;
 
+RTOOdometryNode::RTOOdometryNode()
+{
+	rclcpp::Parameter hostname_param_;
+	rclcpp::Parameter laser_range_finder_number_param_;
+	this->get_parameter_or("hostname", hostname_param_, rclcpp::Parameter("hostname", "172.26.1.1") );
+	hostname_ = hostname_param_.as_string();
 	com_.setName( "Odometry" );
 
 	initModules();
@@ -33,15 +36,15 @@ void RTOOdometryNode::initModules()
 
 bool RTOOdometryNode::spin()
 {
-	ros::Rate loop_rate( 30 );
+	rclcpp::WallRate loop_rate( 200ms );
 
-	while(nh_.ok())
+	while(rclcpp::ok())
 	{
-		ros::Time curr_time = ros::Time::now();
+		rclcpp::Time curr_time = ros::Time::now();
 		odometry_.setTimeStamp(curr_time);
 
 		com_.processEvents();
-		ros::spinOnce();
+		rclcpp::spin_some(shared_from_this());
 		loop_rate.sleep();
 	}
 	return true;
