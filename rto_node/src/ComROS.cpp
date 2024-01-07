@@ -8,8 +8,9 @@
 #include "ComROS.h"
 #include <sstream>
 
-ComROS::ComROS(): Node("rto_com")
+ComROS::ComROS(rclcpp::Node* parent_node_ptr)
 {
+	parent_node = parent_node_ptr;
 }
 
 ComROS::~ComROS()
@@ -26,19 +27,19 @@ void ComROS::errorEvent( const char* errorString )
 	std::ostringstream os;
 	os << name_ << " : " << errorString;
 
-	RCLCPP_ERROR(this->get_logger(), "%s", os.str().c_str() );
+	RCLCPP_ERROR(parent_node->get_logger(), "%s", os.str().c_str() );
 }
 
 void ComROS::connectedEvent()
 {
 	std::ostringstream os;
 	os << name_ << " connected to RTO.";
-	RCLCPP_INFO(this->get_logger(), "%s", os.str().c_str());
+	RCLCPP_INFO(parent_node->get_logger(), "%s", os.str().c_str());
 }
 
 void ComROS::connectionClosedEvent()
 {
 	std::ostringstream os;
 	os << name_ << " disconnected from RTO.";
-	RCLCPP_INFO(this->get_logger(), "%s", os.str().c_str());
+	RCLCPP_INFO(parent_node->get_logger(), "%s", os.str().c_str());
 }

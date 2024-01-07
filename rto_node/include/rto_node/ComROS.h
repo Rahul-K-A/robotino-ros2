@@ -13,15 +13,16 @@
 #include "rclcpp/rclcpp.hpp"
 #include <string>
 
-class ComROS: public rec::robotino::api2::Com, public rclcpp::Node
+class ComROS: public rec::robotino::api2::Com
 {
 public:
-	ComROS();
+	ComROS(rclcpp::Node* parent_node_ptr);
 	~ComROS();
 
 	void setName( const std::string& name );
 
 private:
+	rclcpp::Node* parent_node;
 	std::string name_;
 	void errorEvent( const char* errorString );
 	void connectedEvent();
