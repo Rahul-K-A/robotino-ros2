@@ -10,12 +10,12 @@
 
 #include "rec/robotino/api2/Camera.h"
 
-#include <ros/ros.h>
-#include <sensor_msgs/Image.h>
-#include <sensor_msgs/CameraInfo.h>
+#include "rclcpp/rclcpp.hpp"
+#include "sensor_msgs/msg/image.hpp"
+#include "sensor_msgs/msg/camera_info.hpp"
 #include <image_transport/image_transport.h>
 
-class CameraROS : public rec::robotino::api2::Camera
+class CameraROS : public rec::robotino::api2::Camera, rclcpp::Node
 {
 public:
 	CameraROS();
@@ -25,15 +25,13 @@ public:
 	void setTimeStamp(rclcpp::Time stamp);
 
 private:
-	ros::NodeHandle nh_;
-
 	image_transport::ImageTransport img_transport_;
 	image_transport::CameraPublisher streaming_pub_;
 
-	sensor_msgs::Image img_msg_;
-	sensor_msgs::CameraInfo cam_info_msg_;
+	sensor_msgs::msg::Image img_msg_;
+	sensor_msgs::msg::CameraInfo cam_info_msg_;
 
-	ros::Time stamp_;
+	rclcpp::Time stamp_;
 
 	void imageReceivedEvent(
 			const unsigned char* data,

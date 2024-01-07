@@ -6,22 +6,27 @@
  */
 
 #include "CameraROS.h"
-#include <sensor_msgs/fill_image.h>
+#include "sensor_msgs/fill_image.hpp"
 
 namespace sensor_msgs
 {
-extern bool fillImage(Image &image, const std::string &encoding_arg, uint32_t rows_arg, uint32_t cols_arg, uint32_t step_arg, const void *data_arg);
+extern bool fillImage(
+  msg::Image & image,
+  const std::string & encoding_arg,
+  uint32_t rows_arg,
+  uint32_t cols_arg,
+  uint32_t step_arg,
+  const void * data_arg);
 };
 
 
-CameraROS::CameraROS():
-	img_transport_(nh_)
+CameraROS::CameraROS()
 {
 }
 
 CameraROS::~CameraROS()
 {
-	streaming_pub_.shutdown();
+	streaming_pub_.shutdown()
 }
 
 void CameraROS::setNumber( int number )
