@@ -6,15 +6,13 @@
  */
 
 
-#include <sensor_msgs/fill_image.h>
 
 #include "RTONode.h"
 
-#include <ros/ros.h>
 
 int main(int argc, char** argv)
 {
-	ros::init(argc, argv, "rto_node");
+	rclcpp::init(argc, argv, "rto_node");
 	RTONode rn;
 	rn.spin();
 	return 0;

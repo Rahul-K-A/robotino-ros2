@@ -7,8 +7,18 @@
 
 #include "RTONode.h"
 
-RTONode::RTONode()
-	: nh_("~")
+RTONode::RTONode():
+	Node("rto_node"),
+	analog_input_array_(this),
+	bumper_(this),
+	com_(),
+	digital_input_array_(this),
+	digital_output_array_(this),
+	encoder_input_(this),
+	motor_array_(this),
+	omni_drive_(this),
+	power_management_(this)
+	
 {
 	nh_.param<std::string>("hostname", hostname_, "172.26.1.1" );
 	nh_.param<double>("max_linear_vel", max_linear_vel_, 0.2 );
