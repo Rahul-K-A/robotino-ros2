@@ -16,7 +16,6 @@ class AnalogInputArrayROS: public rec::robotino::api2::AnalogInputArray
 {
 public:
 	AnalogInputArrayROS(rclcpp::Node * parent_node);
-	AnalogInputArrayROS(rclcpp::Node::SharedPtr parent_node_ptr);
 	~AnalogInputArrayROS();
 
 	void setTimeStamp(rclcpp::Time stamp);
