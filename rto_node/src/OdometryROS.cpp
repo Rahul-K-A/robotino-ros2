@@ -44,7 +44,6 @@ void OdometryROS::readingsEvent(double x, double y, double phi,
 	geometry_msgs::msg::Quaternion phi_quat = createQuaternionMsgFromYaw( phi );
 
 	// Construct messages
-	odometry_msg_.header.seq = sequence;
 	odometry_msg_.header.frame_id = "odom";
 	odometry_msg_.header.stamp = stamp_;
 	odometry_msg_.child_frame_id = "base_link";
