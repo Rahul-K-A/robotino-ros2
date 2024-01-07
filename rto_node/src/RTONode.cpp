@@ -13,7 +13,7 @@ RTONode::RTONode():
 	Node("rto_node"),
 	analog_input_array_(this),
 	bumper_(this),
-	com_(),
+	com_(this),
 	digital_input_array_(this),
 	digital_output_array_(this),
 	distance_sensor_array_(this),
@@ -125,9 +125,7 @@ void RTONode::publishJointStateMsg()
 void RTONode::spin()
 {
 	curr_time_ = rclcpp::Clock().now();
-	RCLCPP_INFO(this->get_logger(),"7.1");
 	analog_input_array_.setTimeStamp(curr_time_);
-	RCLCPP_INFO(this->get_logger(),"7.2");
 	digital_input_array_.setTimeStamp(curr_time_);
 	distance_sensor_array_.setTimeStamp(curr_time_);
 	encoder_input_.setTimeStamp(curr_time_);

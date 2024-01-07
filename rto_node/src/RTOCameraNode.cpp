@@ -10,8 +10,9 @@
 
 using namespace std::chrono_literals;
 
-RTOCameraNode::RTOCameraNode()
-	: Node("rto_camera_node")
+RTOCameraNode::RTOCameraNode():
+	Node("rto_camera_node"),
+	com_(this)
 {
 	rclcpp::Parameter hostname_param_;
 	rclcpp::Parameter camera_param_;

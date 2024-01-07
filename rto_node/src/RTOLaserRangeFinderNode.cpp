@@ -9,8 +9,9 @@
 #include <sstream>
 using namespace std::chrono_literals;
 
-RTOLaserRangeFinderNode::RTOLaserRangeFinderNode()
-	: Node("rto_laserrangefinder_node")
+RTOLaserRangeFinderNode::RTOLaserRangeFinderNode():
+	Node("rto_laserrangefinder_node"),
+	com_(this)
 {
 	rclcpp::Parameter hostname_param_;
 	rclcpp::Parameter laser_range_finder_number_param_;
