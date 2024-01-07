@@ -8,11 +8,10 @@
 
 #include "RTOOdometryNode.h"
 
-#include <ros/ros.h>
 
 int main(int argc, char** argv)
 {
-	ros::init(argc, argv, "rto_odometry_node");
+	rclcpp::init(argc, argv);
 	RTOOdometryNode rn;
 	rn.spin();
 	return 0;

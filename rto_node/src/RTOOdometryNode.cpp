@@ -9,7 +9,8 @@
 
 using namespace std::chrono_literals;
 
-RTOOdometryNode::RTOOdometryNode()
+RTOOdometryNode::RTOOdometryNode():
+Node( "rto_odometry_node")
 {
 	rclcpp::Parameter hostname_param_;
 	rclcpp::Parameter laser_range_finder_number_param_;
@@ -40,7 +41,7 @@ bool RTOOdometryNode::spin()
 
 	while(rclcpp::ok())
 	{
-		rclcpp::Time curr_time = ros::Time::now();
+		rclcpp::Time curr_time = rclcpp::Clock().now();
 		odometry_.setTimeStamp(curr_time);
 
 		com_.processEvents();
