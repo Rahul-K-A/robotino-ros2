@@ -14,10 +14,10 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
  
   # Set the path to this package.
-  rto_desc_share = FindPackageShare(package='rto_description')
-  rto_bringup_share = FindPackageShare(package='rto_bringup')
+  rto_desc_share = FindPackageShare('rto_description').find('rto_description')
+  rto_bringup_share = FindPackageShare('rto_bringup').find('rto_bringup')
   # Set the path to the RViz configuration settings
-  default_rviz_config_path = os.path.join(rto_bringup_share, 'rviz/rto_config.rviz')
+  default_rviz_config_path = os.path.join(rto_bringup_share, 'rto_config.rviz')
  
   # Set the path to the URDF file
   default_urdf_model_path = os.path.join(rto_desc_share, 'urdf/robots/rto-3.urdf')
@@ -27,7 +27,6 @@ def generate_launch_description():
   gui = LaunchConfiguration('gui')
   urdf_model = LaunchConfiguration('urdf_model')
   rviz_config_file = LaunchConfiguration('rviz_config_file')
-  use_robot_state_pub = LaunchConfiguration('use_robot_state_pub')
   use_rviz = LaunchConfiguration('use_rviz')
   use_sim_time = LaunchConfiguration('use_sim_time')
  
@@ -65,7 +64,6 @@ def generate_launch_description():
  
   # Subscribe to the joint states of the robot, and publish the 3D pose of each link.
   start_robot_state_publisher_cmd = Node(
-    condition=IfCondition(use_robot_state_pub),
     package='robot_state_publisher',
     executable='robot_state_publisher',
     parameters=[{'use_sim_time': use_sim_time, 
