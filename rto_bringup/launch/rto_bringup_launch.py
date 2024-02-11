@@ -14,7 +14,8 @@ def generate_launch_description():
             namespace='rto3',
             executable='rto_node',
             name='rto_core',
-            parameters=[{'hostname': LaunchConfiguration("hostname")}]
+            parameters=[{'hostname': LaunchConfiguration("hostname")}],
+            remappings=[('/rto_joint_states', '/joint_states')]
         ),
         Node(
             package='rto_node',
