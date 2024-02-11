@@ -14,7 +14,7 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
  
   # Set the path to this package.
-  rto_desc_share = FindPackageShare(package='rto-description')
+  rto_desc_share = FindPackageShare(package='rto_description')
   rto_bringup_share = FindPackageShare(package='rto_bringup')
   # Set the path to the RViz configuration settings
   default_rviz_config_path = os.path.join(rto_bringup_share, 'rviz/rto_config.rviz')
