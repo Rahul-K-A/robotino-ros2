@@ -13,12 +13,10 @@ RTOLaserRangeFinderNode::RTOLaserRangeFinderNode():
 	Node("rto_laserrangefinder_node"),
 	com_(this)
 {
-	rclcpp::Parameter hostname_param_;
-	rclcpp::Parameter laser_range_finder_number_param_;
-	this->get_parameter_or("hostname", hostname_param_, rclcpp::Parameter("hostname", "172.26.1.1") );
-	this->get_parameter_or("laserRangeFinderNumber", laser_range_finder_number_param_, rclcpp::Parameter("laserRangeFinderNumber", 0));
-	hostname_ = hostname_param_.as_string();
-	laserRangeFinderNumber_ = laser_range_finder_number_param_.as_int();
+	this->declare_parameter("hostname", "172.26.1.1");
+	this->declare_parameter("laserRangeFinderNumber", 0);
+	hostname_ = this->get_parameter("hostname").as_string();
+	laserRangeFinderNumber_ = this->get_parameter("laserRangeFinderNumber").as_int();
 	std::ostringstream os;
 	os << "LaserRangeFinder" << laserRangeFinderNumber_;
 	com_.setName( os.str() );

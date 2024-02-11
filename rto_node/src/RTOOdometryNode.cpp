@@ -12,10 +12,8 @@ using namespace std::chrono_literals;
 RTOOdometryNode::RTOOdometryNode():
 Node( "rto_odometry_node")
 {
-	rclcpp::Parameter hostname_param_;
-	rclcpp::Parameter laser_range_finder_number_param_;
-	this->get_parameter_or("hostname", hostname_param_, rclcpp::Parameter("hostname", "172.26.1.1") );
-	hostname_ = hostname_param_.as_string();
+	this->declare_parameter("hostname", "172.26.1.1");
+	hostname_ = this->get_parameter("hostname").as_string();
 	com_.setName( "Odometry" );
 
 	initModules();

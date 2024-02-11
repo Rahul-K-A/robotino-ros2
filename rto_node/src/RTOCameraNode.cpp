@@ -14,12 +14,10 @@ RTOCameraNode::RTOCameraNode():
 	Node("rto_camera_node"),
 	com_(this)
 {
-	rclcpp::Parameter hostname_param_;
-	rclcpp::Parameter camera_param_;
-	this->get_parameter_or("hostname", hostname_param_, rclcpp::Parameter("hostname", "172.26.1.1") );
-	this->get_parameter_or("cameraNumber", camera_param_, rclcpp::Parameter("cameraNumber", 0));
-	hostname_ = hostname_param_.as_string();
-	cameraNumber_ = camera_param_.as_int();
+	this->declare_parameter("hostname", "172.26.1.1");
+	this->declare_parameter("cameraNumber", 0);
+	hostname_ = this->get_parameter("hostname").as_string();
+	cameraNumber_ = this->get_parameter("cameraNumber").as_int();
 	std::ostringstream os;
 	os << "Camera" << cameraNumber_;
 	com_.setName( os.str() );
