@@ -22,23 +22,20 @@ RTONode::RTONode():
 	omni_drive_(this),
 	power_management_(this)
 {
-	rclcpp::Parameter hostname_param_;
-	rclcpp::Parameter max_lin_vel_param_;
-	rclcpp::Parameter min_lin_vel_param_;
-	rclcpp::Parameter max_ang_vel_param_;
-	rclcpp::Parameter min_ang_vel_param_;
-	this->get_parameter_or("hostname", hostname_param_, rclcpp::Parameter("hostname", "172.26.1.1"));
-	this->get_parameter_or("max_linear_vel", max_lin_vel_param_, rclcpp::Parameter("max_linear_vel", 0.2));
-	this->get_parameter_or("min_linear_vel", min_lin_vel_param_, rclcpp::Parameter("min_linear_vel", 0.05));
-	this->get_parameter_or("max_angular_vel", max_ang_vel_param_, rclcpp::Parameter("max_angular_vel", 1.0));
-	this->get_parameter_or("min_angular_vel", min_ang_vel_param_, rclcpp::Parameter("min_angular_vel", 0.1));
+	this->declare_parameter("hostname","172.26.1.1");
+	this->declare_parameter("max_linear_vel", 0.02);
+	this->declare_parameter("min_linear_vel", 0.05);
+	this->declare_parameter("max_angular_vel", 1.0);
+	this->declare_parameter("min_angular_vel", 0.1);
 
-	hostname_ = hostname_param_.as_string();
+ 	hostname_ = this->get_parameter("hostname").as_string();
+	
+	max_linear_vel_ = this->get_parameter("max_linear_vel").as_double();
+	min_linear_vel_ = this->get_parameter("min_linear_vel").as_double();
+	max_angular_vel_ = this->get_parameter("max_angular_vel").as_double();
+	min_angular_vel_ = this->get_parameter("min_angular_vel").as_double();
+
 	RCLCPP_INFO(this->get_logger(), "Connecting to Robotino with host IP %s\n", hostname_.c_str());
-	max_linear_vel_ = max_lin_vel_param_.as_double();
-	min_linear_vel_ = min_lin_vel_param_.as_double();
-	max_angular_vel_ = max_ang_vel_param_.as_double();
-	min_angular_vel_ = min_ang_vel_param_.as_double();
 
 	distances_clearing_pub_ = this->create_publisher<sensor_msgs::msg::PointCloud>("/distance_sensors_clearing", 10);
 	joint_states_pub_= this->create_publisher<sensor_msgs::msg::JointState>("/rto_joint_states", 10);
