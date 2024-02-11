@@ -22,7 +22,7 @@ public:
 	void setName( const std::string& name );
 
 private:
-	rclcpp::Node* parent_node;
+	std::string parent_node_name_;
 	std::string name_;
 	void errorEvent( const char* errorString );
 	void connectedEvent();
