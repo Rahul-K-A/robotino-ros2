@@ -34,6 +34,7 @@ RTONode::RTONode():
 	this->get_parameter_or("min_angular_vel", min_ang_vel_param_, rclcpp::Parameter("min_angular_vel", 0.1));
 
 	hostname_ = hostname_param_.as_string();
+	RCLCPP_INFO(this->get_logger(), "Connecting to Robotino with host IP %s\n", hostname_.c_str());
 	max_linear_vel_ = max_lin_vel_param_.as_double();
 	min_linear_vel_ = min_lin_vel_param_.as_double();
 	max_angular_vel_ = max_ang_vel_param_.as_double();
