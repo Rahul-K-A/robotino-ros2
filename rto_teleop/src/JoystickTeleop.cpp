@@ -7,37 +7,55 @@
 
 #include "JoystickTeleop.h"
 
-JoystickTeleop::JoystickTeleop():
-	nh_("~")
-{
-	cmd_vel_pub_ = nh_.advertise<geometry_msgs::Twist>("/cmd_vel", 1, true);
-	joy_sub_ = nh_.subscribe("/joy", 1, &JoystickTeleop::joyCallback, this);
+using std::placeholders::_1;
+using namespace std::chrono_literals;
 
-	readParams( nh_ );
+JoystickTeleop::JoystickTeleop(): Node("joystick_teleop_node")
+{
+	cmd_vel_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
+	joy_sub_ = this->create_subscription<sensor_msgs::msg::Joy>("/joy",10, std::bind(&JoystickTeleop::joyCallback, this, _1));
+
+	readParams();
+	timer_ = this->create_wall_timer(200ms, std::bind(&JoystickTeleop::spin, this));
+
 }
 
 JoystickTeleop::~JoystickTeleop()
 {
-	cmd_vel_pub_.shutdown();
-	joy_sub_.shutdown();
 }
 
-void JoystickTeleop::readParams( ros::NodeHandle& n)
+void JoystickTeleop::readParams()
 {
-	n.param<int>("axis_linear_x", axis_linear_x_, 1);
-	n.param<int>("axis_linear_y", axis_linear_y_, 0);
-	n.param<int>("axis_angular", axis_angular_, 3);
-	n.param<double>("scale_linear", scale_linear_, 0.3);
-	n.param<double>("scale_angular", scale_angular_, 0.6);
-	n.param<double>("scale_turbo", scale_turbo_, 2.0);
-	n.param<double>("deadzone", deadzone_, 0.1);
+	rclcpp::Parameter axis_linear_x_param_;
+	rclcpp::Parameter axis_linear_y_param_;
+	rclcpp::Parameter axis_angular_param_;
+	rclcpp::Parameter scale_linear_param_;
+	rclcpp::Parameter scale_angular_param_;
+	rclcpp::Parameter scale_turbo_param_;
+	rclcpp::Parameter deadzone_param_;
+
+	this->get_parameter_or("axis_linear_x", axis_linear_x_param_, rclcpp::Parameter("axis_linear_x", 1));
+	this->get_parameter_or("axis_linear_y", axis_linear_y_param_, rclcpp::Parameter("axis_linear_y", 0));
+	this->get_parameter_or("axis_angular", axis_angular_param_, rclcpp::Parameter("axis_angular", 3));
+	this->get_parameter_or("scale_linear", scale_linear_param_, rclcpp::Parameter("scale_linear", .03));
+	this->get_parameter_or("scale_angular", scale_angular_param_, rclcpp::Parameter("scale_angular", .03));
+	this->get_parameter_or("scale_turbo", scale_turbo_param_, rclcpp::Parameter("scale_turbo", .03));
+	this->get_parameter_or("deadzone", deadzone_param_, rclcpp::Parameter("deadzone", .1));
+
+	axis_linear_x_ = axis_linear_x_param_.as_int();
+	axis_linear_y_ = axis_linear_y_param_.as_int();
+	axis_angular_ = axis_angular_param_.as_int();
+	scale_linear_ = scale_linear_param_.as_double();
+	scale_angular_ = scale_angular_param_.as_double();
+	scale_turbo_ = scale_turbo_param_.as_double();
+	deadzone_ = deadzone_param_.as_double();
 }
 
-void JoystickTeleop::joyCallback( const sensor_msgs::JoyConstPtr& msg)
+void JoystickTeleop::joyCallback( const sensor_msgs::msg::Joy::SharedPtr msg)
 {
 	if( msg->axes.size() < 3)
 	{
-		ROS_ERROR( "Too few joystick axes: %lu (expected more than 3)", msg->axes.size() );
+		RCLCPP_ERROR(this->get_logger(), "Too few joystick axes: %lu (expected more than 3)", msg->axes.size());
 		return;
 	}
 
@@ -74,11 +92,5 @@ void JoystickTeleop::joyCallback( const sensor_msgs::JoyConstPtr& msg)
 
 void JoystickTeleop::spin()
 {
-	ros::Rate loop_rate(5);
-	while( nh_.ok() )
-	{
-		cmd_vel_pub_.publish( cmd_vel_msg_ );
-		ros::spinOnce();
-		loop_rate.sleep();
-	}
+	cmd_vel_pub_->publish( cmd_vel_msg_ );
 }

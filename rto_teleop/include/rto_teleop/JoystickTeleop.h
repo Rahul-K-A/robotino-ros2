@@ -8,26 +8,25 @@
 #ifndef JOYSTICKTELEOP_H_
 #define JOYSTICKTELEOP_H_
 
-#include <ros/ros.h>
-#include <geometry_msgs/Twist.h>
-#include <sensor_msgs/Joy.h>
+#include "rclcpp/rclcpp.hpp"
+#include "geometry_msgs/msg/twist.hpp"
+#include "sensor_msgs/msg/joy.hpp"
 
-class JoystickTeleop
+class JoystickTeleop : public rclcpp::Node
 {
 public:
 	JoystickTeleop();
 	~JoystickTeleop();
 
 private:
-	ros::NodeHandle nh_;
 
-	ros::Publisher cmd_vel_pub_;
-	ros::Subscriber joy_sub_;
+	rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
+	rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_sub_;
 
-	geometry_msgs::Twist cmd_vel_msg_;
+	geometry_msgs::msg::Twist cmd_vel_msg_;
 
-	void readParams( ros::NodeHandle& n );
-	void joyCallback( const sensor_msgs::JoyConstPtr& msg);
+	void readParams();
+	void joyCallback( const sensor_msgs::msg::Joy::SharedPtr msg);
 
 	// params
 	int axis_linear_x_;
@@ -39,6 +38,7 @@ private:
 	double deadzone_;
 
 public:
+	rclcpp::TimerBase::SharedPtr timer_;
 	void spin();
 };
 
